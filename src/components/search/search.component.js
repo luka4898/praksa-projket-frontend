@@ -1,12 +1,13 @@
 import React from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
 
-const Search = () => {
+const Search = ({placeholder, handleChange }) => {
   return (
     <Form className="d-flex">
       <FormControl
         type="search"
-        placeholder="Search event"
+        placeholder={placeholder}
+        onChange={handleChange}
         className="me-2"
         aria-label="Search"
       />
