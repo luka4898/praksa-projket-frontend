@@ -11,6 +11,8 @@ const Header = (props) => (
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link href="#">About us</Nav.Link>
+          <Nav.Link href="/venue">Venue</Nav.Link>
+          <Nav.Link href="/city">City</Nav.Link>
           <NavDropdown title="Events" id="collasible-nav-dropdown">
             <NavDropdown.Item href="#">Sport events</NavDropdown.Item>
             <NavDropdown.Item href="#">Concert Events</NavDropdown.Item>
