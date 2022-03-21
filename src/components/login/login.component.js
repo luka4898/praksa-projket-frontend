@@ -3,29 +3,34 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import {Link} from 'react-router-dom';
 
-const LogIn = () => {
+const LogIn = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
 
+ 
   const submit = async (e) => {
     e.preventDefault();
-    await fetch('https://localhost:7100/api/Authenticate/login', {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify({
-        email,
-        password,
-      }),
+
+     await fetch('https://localhost:7100/api/Authenticate/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify({
+            email,
+            password
+        })
     });
+
     setRedirect(true);
-  };
-  if (redirect) {
-    return <Redirect to="/" />;
-  }
+    props.setName();
+    
+}
+
+if (redirect) {
+    return <Redirect to="/"/>;
+}
+
   return (
     
     <div className="container">
@@ -33,7 +38,7 @@ const LogIn = () => {
       <form onSubmit={submit}>
         <h1 className="h3 mb-3 fw-normal">Please log in</h1>
         <input
-          type="emil"
+          type="email"
           className="form-control"
           placeholder="Email"
           required

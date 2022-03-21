@@ -9,17 +9,48 @@ import { eventTypes } from "./components/event-taypes/event-types.components";
 import Forgot from "./components/login/forgot.component";
 import ResetPassword from "./components/login/resetpassword.component";
 import Venue from "./components/venues/venue.component";
+import { useEffect } from "react";
+import { useState } from "react";
 
 
 function App() {
- 
+  const [name, setName] = useState(" ");
 
+  useEffect(()=>{
+    (
+      async ()=>{
+        const res=await fetch('https://localhost:7100/api/Authenticate/loggeduser', {
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+        });
+        const content = await res.json();
+
+        setName(content.userName);
+        
+      }
+    )();
+  });
+
+  const handleName = (name) => {
+    setName(name);
+    
+  };
+
+  const handleRefresh = async () => {
+    const res=await fetch('https://localhost:7100/api/Authenticate/loggeduser', {
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+        });
+        const content = await res.json();
+
+        setName(content.userName);
+  };
   return (
     <BrowserRouter>
-      <Header />
+      <Header  name={name} setName={handleName}/>
     <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/login" component={LogIn} />
+        <Route path="/" exact component={() => <Home name={name}/>}/>
+        <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
         <Route path="/registrate" component={Registrate} />
         <Route path="/city" component={Cities} />
         <Route path="/eventType" component={eventTypes}/>

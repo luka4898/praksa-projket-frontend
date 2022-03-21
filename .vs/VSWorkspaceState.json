@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\components"
+    "\\src\\components",
+    "\\src\\components\\venues"
   ],
-  "SelectedNode": "\\src\\components",
+  "SelectedNode": "\\src\\components\\venues\\editvenue.component.js",
   "PreviewInSolutionExplorer": false
 }

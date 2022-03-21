@@ -3,7 +3,33 @@ import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
-const Header = (props) => (
+const Header = (props) => {
+
+   const logout = async ()=>{
+      await fetch('https://localhost:7100/api/Authenticate/logout',{
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+      });
+
+      props.setName(" ");
+   }
+  let menu;
+ 
+  if(props.name == null) {
+   menu = (
+     <>
+      <Link to="/login">Log in</Link>
+      <Link to="/registrate">Registrate</Link>
+      </>
+    )
+  }else{
+    menu = (
+      <>
+       <Link to="/login" onClick={logout}>Logout</Link>
+       </>
+     )
+  }
+ return(
   <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
     <Container>
       <Navbar.Brand href="#">Event Managment</Navbar.Brand>
@@ -22,14 +48,12 @@ const Header = (props) => (
           </NavDropdown>
         </Nav>
         <Nav>
-          <Link to="/login">Log in</Link>
-
-          <Link to="/registrate">Registrate</Link>
+          {menu}
         </Nav>
       </Navbar.Collapse>
     </Container>
   </Navbar>
-);
+ )};
 
 export default Header;
 
