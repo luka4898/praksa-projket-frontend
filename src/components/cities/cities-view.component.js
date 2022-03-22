@@ -5,21 +5,54 @@ import { Button, ButtonToolbar, Table } from "react-bootstrap";
 import { AddCities } from "./addcities.comonent";
 import { EditCities } from "./editcities.component";
 
-import Search from "../search/search.component";
+
 
 export class Cities extends Component{
     
     constructor(props){
         super(props);
-        this.state={cities:[], addModalShow:false, editModalShow:false, searchField:"" }
+        this.refreshList = this.refreshList.bind(this);
+        this.state={cities:[], addModalShow:false, editModalShow:false, 
+            cityName:"",
+            cityNameFilter:"",
+            cityWithoutFilter:[]}; 
     }
+    FilterFn(){
+        var cityNameFilter=this.state.cityNameFilter;
+ 
+        var filteredData=this.state.cityWithoutFilter.filter(
+         function(el){
+             return el.cityName.toString().toLowerCase().includes(cityNameFilter.toString().trim().toLowerCase())
+         } 
+         
+     );
+     this.setState({cities:filteredData});
+ }
+
+ sortResult(prop,asc){
+    var sortedData=this.state.cityWithoutFilter.sort(function(a,b){
+        if(asc){
+            return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0);
+        }
+        else{
+            return (b[prop]>a[prop])?1:((b[prop]<a[prop])?-1:0);
+        }
+    });
+
+    this.setState({cities:sortedData});
+}
 
     refreshList(){
         fetch("https://localhost:7100/api/Cities")
         .then(res=>res.json())
         .then(data=>{
-            this.setState({cities:data})
+            this.setState({cities:data,  cityWithoutFilter:data})
         })
+    }
+
+    changeCityNameFilter =(e)=>{
+        this.state.cityNameFilter=e.target.value;
+        this.FilterFn();
     }
 
     componentDidMount(){
@@ -39,24 +72,41 @@ export class Cities extends Component{
                     "Content-Type":"application/json"
                 }
             })
+            .then((result)=>{
+                alert(result);
+                this.refreshList();
+            
+            })
         }
     }
-    onSearchChange = e => {
-        this.setState({ searchField: e.target.value });
-      };
+   
     render(){
-        const {cities, citiid, citiname, searchField}=this.state;
+        const {cities, citiid, citiname}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false})
         let editModalClose=()=>this.setState({editModalShow:false})
-        const filteredCities = cities.filter(citi =>
-            citi.cityName.toLowerCase().includes(searchField.toLowerCase())
-          );
+       
 
         return(
-            <div className="container">
-                <Search
-                 placeholder={'search city'}
-                handleChange={this.onSearchChange}/>
+            <div className="container mt-4">
+                
+                 <div className="d-flex">
+                        <input className="form-control m-2"
+                        onChange={this.changeCityNameFilter}
+                        placeholder="Filter"/>
+                        <button type="button" className="btn btn-light"
+            onClick={()=>this.sortResult('citiname',true)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z"/>
+                </svg>
+            </button>
+
+            <button type="button" className="btn btn-light"
+            onClick={()=>this.sortResult('citiname',false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z"/>
+                </svg>
+            </button>
+                          </div>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -65,20 +115,23 @@ export class Cities extends Component{
                             <th>Options</th>
                         </tr>
                     </thead>
-                    <tbody filter={()=>filteredCities}>
+                    <tbody>
                         {cities.map(citi=>
-                        <tr  key={citi.cityId} cities={cities} >
+                        <tr  key={citi.cityId} >
                             <td>{citi.cityId}</td>
                             <td>{citi.cityName}</td>
                             <td>
                                 <ButtonToolbar >
-                                    <Button className="mr-2" variant="info" onClick={()=>this.setState({editModalShow:true, citiid:citi.cityId, citiname:citi.cityName})}>
+                                    <Button className="m-2" variant="info" onClick={()=>this.setState({editModalShow:true, citiid:citi.cityId, citiname:citi.cityName})}>
                                         Edit
                                     </Button>
-                                    <Button className="mr-2" variant="danger" onClick={()=>this.deleteCity(citi.cityId)}>
+
+                                    <Button className="m-2" variant="danger" onClick={()=>this.deleteCity(citi.cityId)}>
                                         Delete 
                                     </Button>
-                                    <EditCities show={this.state.editModalShow}
+                                    <EditCities 
+                                    refreshlist={this.refreshList}
+                                    show={this.state.editModalShow}
                                     onHide={editModalClose}
                                     citiid={citiid}
                                     citiname={citiname}/>
@@ -93,7 +146,7 @@ export class Cities extends Component{
                     onClick={()=>this.setState({addModalShow:true})}>
                         Add city
                     </Button>
-                    <AddCities show={this.state.addModalShow} onHide={addModalClose}/>                </ButtonToolbar>
+                    <AddCities refreshlist={this.refreshList} show={this.state.addModalShow} onHide={addModalClose}/>                </ButtonToolbar>
             </div>
         )
     }

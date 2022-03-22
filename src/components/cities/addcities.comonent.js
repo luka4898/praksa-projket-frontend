@@ -22,12 +22,12 @@ export class AddCities extends Component{
                 cityName:e.target.cityName.value
             })
         })
-        .then(res=>res.json())
         .then((result)=>{
             alert(result)
+            this.props.refreshlist();
         },
         (error)=>{
-            alert("Failed")
+            alert(error);
         })
     }
     render(){
