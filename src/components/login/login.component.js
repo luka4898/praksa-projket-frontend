@@ -12,7 +12,7 @@ const LogIn = (props) => {
   const submit = async (e) => {
     e.preventDefault();
 
-     await fetch('https://localhost:7100/api/Authenticate/login', {
+     const res=await fetch('https://localhost:7100/api/Authenticate/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
@@ -21,7 +21,7 @@ const LogIn = (props) => {
             password
         })
     });
-
+    const content = res.json();
     setRedirect(true);
     props.setName();
     

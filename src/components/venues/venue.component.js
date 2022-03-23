@@ -5,11 +5,11 @@ import AddVenue from './addvenue.component';
 import EditVenue from './editvenue.component';
 
 class Venue extends Component {
-
+    
     constructor(props){
         super(props);
         this.refreshList = this.refreshList.bind(this);
-        this.state={vens:[], addModalShow:false, editModalShow:false, 
+        this.state={vens: null, addModalShow:false, editModalShow:false, isPending:true,
         venueName:"",
         venueNameFilter:"",
         venuesWithoutFilter:[]};
@@ -24,7 +24,8 @@ class Venue extends Component {
         } 
         
     );
-    this.setState({vens:filteredData});
+    this.setState({
+        vens:filteredData});
 }
 
 sortResult(prop,asc){
@@ -44,7 +45,7 @@ sortResult(prop,asc){
         fetch('https://localhost:7100/api/Venues')
         .then(response=>response.json())
         .then(data=>{
-            this.setState({vens: data, venuesWithoutFilter:data});
+            this.setState({vens: data, venuesWithoutFilter:data, isPending: false});
             
         });
     }
@@ -78,11 +79,14 @@ sortResult(prop,asc){
     }
     render() { 
         const {vens, venueId,venueName,address,
-            capacity,cityName, cityId} = this.state;
+            capacity,cityName, cityId, isPending} = this.state;
         let addModalClose=()=>this.setState({addModalShow:false});
         let editModalClose=()=>this.setState({editModalShow:false});
         return (
-            <div className='container mt-4'>
+            <>
+            {isPending && <div className='container'>Loading...</div>}
+
+            {vens && <div className='container mt-4'>
                  <div className="d-flex">
                         <input className="form-control m-2"
                         onChange={this.changeVenueNameFilter}
@@ -164,7 +168,8 @@ sortResult(prop,asc){
                     onHide={addModalClose}
                     refreshlist={this.refreshList}/>
                 </ButtonToolbar>
-            </div>
+            </div>}
+            </>
         );
     }
 }

@@ -9,13 +9,15 @@ import { eventTypes } from "./components/event-taypes/event-types.components";
 import Forgot from "./components/login/forgot.component";
 import ResetPassword from "./components/login/resetpassword.component";
 import Venue from "./components/venues/venue.component";
+import AdminRoute from "./components/adminroute";
+import OrganizerRoute from "./components/adminroute";
 import { useEffect } from "react";
 import { useState } from "react";
 
 
 function App() {
-  const [name, setName] = useState(" ");
-
+  const [role, setName] = useState(" ");
+ 
   useEffect(()=>{
     (
       async ()=>{
@@ -25,16 +27,18 @@ function App() {
         });
         const content = await res.json();
 
-        setName(content.userName);
-        
+        setName(content.role);
+        localStorage.setItem("role",JSON.stringify(role));
       }
     )();
-  });
+  },[role]);
 
-  const handleName = (name) => {
-    setName(name);
+
+  const handleRole = (role) => {
+    setName(role);
     
   };
+
 
   const handleRefresh = async () => {
     const res=await fetch('https://localhost:7100/api/Authenticate/loggeduser', {
@@ -42,21 +46,22 @@ function App() {
           credentials: 'include',
         });
         const content = await res.json();
-
-        setName(content.userName);
+        setName(content.role);
   };
+
+  
   return (
     <BrowserRouter>
-      <Header  name={name} setName={handleName}/>
+      <Header  name={role} setName={handleRole}/>
     <Switch>
-        <Route path="/" exact component={() => <Home name={name}/>}/>
+        <Route path="/" exact component={() => <Home name={role}/>}/>
         <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
         <Route path="/registrate" component={Registrate} />
-        <Route path="/city" component={Cities} />
-        <Route path="/eventType" component={eventTypes}/>
         <Route path="/forgot" component={Forgot} />
         <Route path="/resetpassword" component={ResetPassword} />
-        <Route path="/venue" component={Venue} />
+        <AdminRoute path="/city" component={Cities} role={localStorage.getItem("role")} />
+        <AdminRoute path="/venue" component={Venue} role={localStorage.getItem("role")} />
+        <AdminRoute path="/eventType" component={eventTypes} role={localStorage.getItem("role")} />
       </Switch>
     </BrowserRouter>
   );
