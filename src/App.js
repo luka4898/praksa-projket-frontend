@@ -62,6 +62,7 @@ function App() {
         <AdminRoute path="/city" component={Cities} role={localStorage.getItem("role")} />
         <AdminRoute path="/venue" component={Venue} role={localStorage.getItem("role")} />
         <AdminRoute path="/eventType" component={eventTypes} role={localStorage.getItem("role")} />
+        <AdminRoute path="event" component={Event} role={localStorage.getItem("role")}/>
       </Switch>
     </BrowserRouter>
   );

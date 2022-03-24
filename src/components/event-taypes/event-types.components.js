@@ -69,10 +69,10 @@ export class eventTypes extends Component{
                             <td>{et.eventTypeName}</td>
                             <td>
                                 <ButtonToolbar >
-                                    <Button className="mr-2" variant="info" onClick={()=>this.setState({editModalShow:true,eventTypeId:et.eventTypeId, eventTypeName:et.eventTypeName})}>
+                                    <Button className="m-2" variant="info" onClick={()=>this.setState({editModalShow:true,eventTypeId:et.eventTypeId, eventTypeName:et.eventTypeName})}>
                                         Edit
                                     </Button>
-                                    <Button className="mr-2" variant="danger" onClick={()=>this.deleteCity(et.eventTypeId)}>
+                                    <Button className="m-2" variant="danger" onClick={()=>this.deleteCity(et.eventTypeId)}>
                                         Delete 
                                     </Button>
                                    <EditEventType show={this.state.editModalShow}
