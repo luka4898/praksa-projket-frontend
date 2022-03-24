@@ -1,24 +1,24 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const AdminRoute = ({ component: Component, role,...rest }) => {
-    if (role !== 'undefined') {
-        var initialValue= JSON.parse(role);
-      }
-      else{
-          var initialValue=role;
-      }
-    
+const AdminRoute = ({ component: Component, role, ...rest }) => {
+    if (role != null) {
+        var initialValue = JSON.parse(role);
+    }
+    else {
+        var initialValue = [];
+    }
+
     return (
         <Route
-            {... rest}
+            {...rest}
             render={(props) =>
-                initialValue === "Admin" ? (
-                     <Component {...props} />):(
-                      <Redirect to ='/' />
+                initialValue.indexOf("Admin") > -1 ? (
+                    <Component {...props} />) : (
+                    <Redirect to='/' />
 
-        )} />
-       );
-                
+                )} />
+    );
+
 };
 export default AdminRoute;

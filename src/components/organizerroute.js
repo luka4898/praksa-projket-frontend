@@ -1,24 +1,24 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const OrganizerRoute = ({ component: Component, role,...rest }) => {
-    if (role !== 'undefined') {
-        var initialValue= JSON.parse(role);
-      }
-      else{
-          var initialValue=role;
-      }
-    
+const OrganizerRoute = ({ component: Component, role, ...rest }) => {
+    if (role != null) {
+        var initialValue = JSON.parse(role);
+    }
+    else {
+        var initialValue = [];
+    }
+
     return (
         <Route
-            {... rest}
+            {...rest}
             render={(props) =>
-                initialValue === "Organizer" ? (
-                     <Component {...props} />):(
-                      <Redirect to ='/' />
+                initialValue.indexOf("Organizer") > -1 ? (
+                    <Component {...props} />) : (
+                    <Redirect to='/' />
 
-        )} />
-       );
-                
+                )} />
+    );
+
 };
 export default OrganizerRoute;

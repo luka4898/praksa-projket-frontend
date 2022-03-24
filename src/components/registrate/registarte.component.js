@@ -1,99 +1,137 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import FormInput from "../forminput";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Registrate = () => {
-  const [username, setUserName] = useState("");
-  const [firstname, setFristName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phonnumber, setPhonNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    
-    fetch(`https://localhost:7100/api/Authenticate/register`, {
-      method: "POST",
-      headers: {
-        "Accept": "*/*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        firstname,
-        lastname,
-        email,
-        address,
-        phonnumber,
-        password,
-      }),
-    })
-      setRedirect(true)
-  };
-  if(redirect)
-    return <Redirect to="/login"></Redirect>;
-  return (
-    <div className="container">
-      <form onSubmit={submit} className="p-2">
-        <h1 className="h3 mb-3 fw-normal ">Please register</h1>
+    const [values, setValues] = useState({
+        username: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        address: "",
+        phoneNumber: "",
+        password: ""
+    });
+    const inputs = [
+        {
+            id: 1,
+            name: "username",
+            type: "text",
+            placeholder: "Username",
+            errorMessage:
+                "Username is required!",
+            label: "Username*",
+            pattern: ".{1,}",
+            required: true,
+        },
+        {
+            id: 2,
+            name: "firstname",
+            type: "text",
+            placeholder: "First name",
+            errorMessage:
+                "Firstname is required!",
+            label: "First name*",
+            pattern: ".{1,}",
+            required: true,
+        },
+        {
+            id: 3,
+            name: "lastname",
+            type: "text",
+            placeholder: "Last name",
+            errorMessage:
+                "Last name is required!",
+            label: "Last name*",
+            pattern: ".{1,}",
+            required: true,
+        },
+        {
+            id: 4,
+            name: "address",
+            type: "text",
+            placeholder: "Address",
+            errorMessage:
+                "Address is required!",
+            label: "Address*",
+            pattern: ".{1,}",
+            required: true,
+        },
+        {
+            id: 5,
+            name: "phoneNumber",
+            type: "text",
+            placeholder: "Phone number",
+            errorMessage:
+                "Phone number should have more than 9 characters and only numbers!",
+            label: "Phone number*",
+            pattern: "^[0-9]{9,}$",
+            required: true,
+        },
+        {
+            id: 6,
+            name: "email",
+            type: "email",
+            placeholder: "Email",
+            errorMessage: "It should be a valid email address!",
+            label: "Email*",
+            required: true,
+        },
+        {
+            id: 7,
+            name: "password",
+            type: "password",
+            placeholder: "Password",
+            errorMessage:
+                "Password should be more than 8 characters and include at least 1 lowercase and uppercase letter, 1 number and 1 special character!",
+            label: "Password",
+            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$`,
+            required: true,
+        },
 
-        <input
-          type="text"
-          className="form-control "
-          placeholder="User name"
-          required
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Frist name"
-          required
-          onChange={(e) => setFristName(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Last name"
-          required
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Email"
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Address"
-          required
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <input
-          type="tel"
-          className="form-control"
-          placeholder="Phone number"
-          required
-          onChange={(e) => setPhonNumber(e.target.value)}
-        />
-        <input
-          className="form-control"
-          placeholder="Password"
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    ];
 
-        <button className="w-100 btn btn-lg btn-primary" type="submit">
-          Submit
-        </button>
-      </form>
-    </div>
-  );
+    const [redirect, setRedirect] = useState(false);
+
+    const onChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+    };
+
+    const submit = async (e) => {
+        e.preventDefault();
+        const { username, firstname, lastname, email, address, phoneNumber, password } = values;
+        fetch(`https://localhost:7100/api/Authenticate/register`, {
+            method: "POST",
+            headers: {
+                "Accept": "*/*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username, firstname, lastname, email, address, phoneNumber, password,
+            })
+        })
+        setRedirect(true)
+    };
+    if (redirect)
+        return <Redirect to="/login"></Redirect>;
+    return (
+        <div className="container-sm mx-auto">
+            <form onSubmit={submit} className="text-center m-4">
+                <h1>Register</h1>
+                {inputs.map((input) => (
+                    <FormInput
+                        key={input.id}
+                        {...input}
+                        value={values[input.name]}
+                        onChange={onChange}
+                    />
+                ))}
+                <button className="custom">Submit</button>
+            </form>
+        </div>
+    );
 };
 
 export default Registrate;
