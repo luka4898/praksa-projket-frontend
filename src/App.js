@@ -49,6 +49,7 @@ function App() {
         });
         const content = await res.json();
         setName(content.role);
+        window.localStorage.reload();
   };
 
   

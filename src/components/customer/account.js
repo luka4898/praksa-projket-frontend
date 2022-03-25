@@ -10,17 +10,35 @@ export class Accounts extends Component{
     constructor(props){
         super(props); 
         this.refreshList = this.refreshList.bind(this);
-        this.state={accounts:[], addModalShow:false, infoModalShow:false }
+        this.state={accounts:[], addModalShow:false, infoModalShow:false,
+            firstName: "",
+            accountNameFilter: "",
+            accountWithoutFilter: [] };
     }
     
+    FilterFn() {
+        var accountNameFilter = this.state.accountNameFilter;
+
+        var filteredData = this.state.accountWithoutFilter.filter(
+            function (el) {
+                return el.firstName.toString().toLowerCase().includes(accountNameFilter.toString().trim().toLowerCase())
+            }
+
+        );
+        this.setState({ accounts: filteredData });
+    }
+
     refreshList(){
         fetch("https://localhost:7100/api/Admin/listcustomers")
         .then(res=>res.json())
         .then(data=>{
-            this.setState({accounts:data})
+            this.setState({accounts:data, accountWithoutFilter: data})
         })
     }
-
+    changeAccountNameFilter = (e) => {
+        this.state.accountNameFilter = e.target.value;
+        this.FilterFn();
+    }
     componentDidMount(){
         this.refreshList();
     }
@@ -37,7 +55,11 @@ export class Accounts extends Component{
 
         return(
             <div className="container">
-            
+                <div className="d-flex">
+                    <input className="form-control m-2"
+                        onChange={this.changeAccountNameFilter}
+                        placeholder="Filter" />
+                </div>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>

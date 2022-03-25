@@ -11,7 +11,6 @@ const LogIn = (props) => {
 
     const submit = async (e) => {
         e.preventDefault();
-
         const res = await fetch('https://localhost:7100/api/Authenticate/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -24,11 +23,10 @@ const LogIn = (props) => {
         const content = res.json();
         setRedirect(true);
         props.setUsername();
-
     }
 
     if (redirect) {
-        return <Redirect to="/" />;
+        return <Redirect exact to="/" />;
     }
 
     return (
