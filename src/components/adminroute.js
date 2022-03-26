@@ -1,24 +1,24 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useCurrentUser } from "../CurrentUserContext";
 
-const AdminRoute = ({ component: Component, role, ...rest }) => {
-    if (role != null) {
-        var initialValue = JSON.parse(role);
+const AdminRoute = ({ component: Component, ...rest }) => {  
+    let adminrole=false;
+    const {currentUser, loading, authed}=useCurrentUser();
+    if(authed){
+         adminrole=JSON.stringify(currentUser.role).indexOf("Admin") > -1 
     }
-    else {
-        var initialValue = [];
-    }
-
     return (
         <Route
-            {...rest}
-            render={(props) =>
-                initialValue.indexOf("Admin") > -1 ? (
-                    <Component {...props} />) : (
-                    <Redirect to='/' />
+            {... rest}
+            render={(props) =>(
+                !loading ? (
+                authed && adminrole?  (
+                     <Component {...props} />):(
+                        <Redirect to="/"/>
 
-                )} />
-    );
-
+        )):console.log("Loading...")) } />
+       );
+                
 };
 export default AdminRoute;

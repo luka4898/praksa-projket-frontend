@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import FormInput from "../forminput";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const Registrate = () => {
 
@@ -66,7 +66,7 @@ const Registrate = () => {
             placeholder: "Phone number",
             errorMessage:
                 "Phone number should have more than 9 characters and only numbers!",
-            label: "Phone number*",
+            label: "Phone*",
             pattern: "^[0-9]{9,}$",
             required: true,
         },
@@ -117,9 +117,9 @@ const Registrate = () => {
     if (redirect)
         return <Redirect to="/login"></Redirect>;
     return (
-        <div className="container-sm mx-auto">
+        <div className="container">
             <form onSubmit={submit} className="text-center m-4">
-                <h1>Register</h1>
+                <h1 className="text-center">Register</h1>
                 {inputs.map((input) => (
                     <FormInput
                         key={input.id}
@@ -128,7 +128,7 @@ const Registrate = () => {
                         onChange={onChange}
                     />
                 ))}
-                <button className="custom">Submit</button>
+                <button className="custom-button">Submit</button>
             </form>
         </div>
     );

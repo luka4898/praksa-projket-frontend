@@ -4,36 +4,39 @@ import { Link } from "react-router-dom";
 
 
 const Header = (props) => {
-
+    
     const logout = async () => {
         await fetch('https://localhost:7100/api/Authenticate/logout', {
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include',
         });
 
-        props.setUsername(" ");
-        localStorage.clear();
+        props.setName('');
     }
     let menu;
-    let adminmenu;
-    let usermenu;
-    let orgmenu;
     if (props.name == null || props.name == ' ') {
         menu = (
             <>
-                <Link to="/login">Log in</Link>
-                <Link to="/registrate">Registrate</Link>
+                <Nav.Link href="/login">Log in</Nav.Link>
+                <Nav.Link href="/registrate">Registrate</Nav.Link>
             </>
         )
-    } else if (props.name=='Admin') {
+    } else {
         menu = (
             <>
-                <Link to="/login" onClick={logout}>Logout</Link>
+                <Nav.Link href="/login" onClick={logout}>Logout</Nav.Link>
             </>
         )
-        adminmenu=(
-            <>
-                 <Nav className="me-auto">
+    }
+
+    return (
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Container>
+                <Navbar.Brand href="#">Event Managment</Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="me-auto">
                         <Nav.Link href="#">About us</Nav.Link>
                         <Nav.Link href="/venue">Venue</Nav.Link>
                         <Nav.Link href="/city">City</Nav.Link>
@@ -45,42 +48,6 @@ const Header = (props) => {
                             <NavDropdown.Item href="#">Other</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-            </>
-        )
-    }
-    else if (props.name=="Organizers"){
-        menu = (
-            <>
-                <Link to="/login" onClick={logout}>Logout</Link>
-            </>
-        )
-        orgmenu=(
-            <>
-                 <h1 className="text-white">{props.name}</h1>
-            </>
-        )
-    }
-    else if (props.name=="Customer"){
-        menu = (
-            <>
-                <Link to="/login" onClick={logout}>Logout</Link>
-            </>
-        )
-        usermenu=(
-            <>
-                <h1 className="text-white">{props.name}</h1>
-            </>
-        )
-    }
-    return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Container>
-                <Navbar.Brand href="#">Event Managment</Navbar.Brand>
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav">
-                   {adminmenu}
-                   {usermenu}
-                   {orgmenu}
                     <Nav>
                         {menu}
                     </Nav>

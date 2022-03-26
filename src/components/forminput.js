@@ -13,9 +13,9 @@ const FormInput = (props) => {
     };
 
     return (
-        <div className="form-group m-4 justify-content-center">
-            <label className="m-2">{label}</label>
-            <input
+        <div className="form-group justify-content-center">
+            <label className="m-2 custom-label">{label}</label>
+            <input className="custom-input"
                 {...inputProps}
                 onChange={onChange}
                 onBlur={handleFocus}
@@ -24,7 +24,7 @@ const FormInput = (props) => {
                 }
                 focused={focused.toString()}
             />
-            <span>{errorMessage}</span>
+            <span className="custom-span">{errorMessage}</span>
         </div>
     );
 };

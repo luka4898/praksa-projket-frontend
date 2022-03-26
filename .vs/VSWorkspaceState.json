@@ -1,14 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\components",
-    "\\src\\components\\cities",
-    "\\src\\components\\events",
-    "\\src\\components\\header",
-    "\\src\\components\\login",
-    "\\src\\components\\registrate",
-    "\\src\\components\\venues"
+    "\\src"
   ],
   "SelectedNode": "\\src\\App.js",
   "PreviewInSolutionExplorer": false
