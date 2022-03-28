@@ -15,8 +15,10 @@ export class EditCities extends Component{
             method:"PUT",
             headers:{
                 "Acept":"application/json",
-                "Content-Type":"application/json"
+                "Content-Type":"application/json",
+                
             },
+            credentials: 'include',
             body:JSON.stringify({
                 cityId:e.target.cityId.value,
                 cityName:e.target.cityName.value,

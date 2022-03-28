@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
-import axios from "axios";
 
 class AddVenue extends Component {
     constructor(props) {
@@ -15,7 +14,9 @@ class AddVenue extends Component {
 
     componentDidMount() {
 
-        fetch('https://localhost:7100/api/Cities')
+        fetch('https://localhost:7100/api/Cities', {
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'})
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -27,17 +28,22 @@ class AddVenue extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        axios("https://localhost:7100/api/Venues", {
-            method: "POST",
-            header: { "Context-type": "application/json" },
-            data: {
+        fetch("https://localhost:7100/api/Venues",{
+            method:"POST",
+            headers:{
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                
+            },
+            credentials: 'include',
+            body:JSON.stringify({
 
                 venueName: event.target.venueName.value,
                 address: event.target.address.value,
                 capacity: event.target.capacity.value,
                 cityId: event.target.cityName.value,
 
-            }
+            })
         })
             .then((res) => {
                 alert(res.data);

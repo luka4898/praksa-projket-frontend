@@ -47,7 +47,9 @@ class Venue extends Component {
 
     refreshList() {
         setTimeout(() => {
-            fetch('https://localhost:7100/api/Venues')
+            fetch('https://localhost:7100/api/Venues', {
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include'})
                 .then(response => {
                     if (!response.ok) {
                         throw Error('Could not fetch that resource!')
@@ -81,7 +83,8 @@ class Venue extends Component {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }
+                },
+                credentials: 'include'
             })
                 .then((result) => {
                     alert(result);

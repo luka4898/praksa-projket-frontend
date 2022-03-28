@@ -14,7 +14,9 @@ class EditVenue extends Component {
 
     componentDidMount() {
 
-        fetch('https://localhost:7100/api/Cities')
+        fetch('https://localhost:7100/api/Cities', {
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'})
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -33,6 +35,7 @@ class EditVenue extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({
                 venueId: event.target.venueId.value,
                 venueName: event.target.venueName.value,

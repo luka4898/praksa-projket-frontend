@@ -44,7 +44,9 @@ export class Cities extends Component {
     }
 
     refreshList() {
-        fetch("https://localhost:7100/api/Cities")
+        fetch("https://localhost:7100/api/Cities", {
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'})
             .then(res => res.json())
             .then(data => {
                 this.setState({ cities: data, cityWithoutFilter: data })
@@ -70,8 +72,10 @@ export class Cities extends Component {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
-                }
+                    "Content-Type": "application/json",
+                    
+                },
+                credentials: 'include',
             })
                 .then((result) => {
                     alert(result);

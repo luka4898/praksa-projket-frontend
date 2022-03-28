@@ -17,7 +17,9 @@ export class AddCities extends Component{
             headers:{
                 "Accept": "application/json",
                 "Content-Type": "application/json",
+               
             },
+            credentials: 'include',
             body:JSON.stringify({
                 cityName:e.target.cityName.value
             })
