@@ -86,6 +86,7 @@ class AddVenue extends Component {
                                     <Form.Group controlId="cityName">
                                         <Form.Label>City Name</Form.Label>
                                         <Form.Control as="select" defaultValue="">
+                                            <option value="" disabled>--Select city name--</option>
                                             {this.state.cities.map(c =>
                                                 <option key={c.cityId} value={c.cityId}>{c.cityName}</option>)}
                                         </Form.Control>

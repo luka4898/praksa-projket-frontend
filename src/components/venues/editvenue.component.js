@@ -45,8 +45,8 @@ class EditVenue extends Component {
             })
         })
             .then((response) => {
-                let statusCode = response.status,
-                    success = response.ok;
+                let statusCode = response.status;
+                let  success = response.ok;
 
                 response.json().then(response => {
 

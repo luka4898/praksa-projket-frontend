@@ -25,7 +25,6 @@ class Venue extends Component {
             function (el) {
                 return el.venueName.toString().toLowerCase().includes(venueNameFilter.toString().trim().toLowerCase())
             }
-
         );
         this.setState({
             vens: filteredData
@@ -99,6 +98,7 @@ class Venue extends Component {
             capacity, cityName, cityId, isPending, error } = this.state;
         let addModalClose = () => this.setState({ addModalShow: false });
         let editModalClose = () => this.setState({ editModalShow: false });
+     
         return (
             <>
                 {error && <div className='container'>{error}</div>}

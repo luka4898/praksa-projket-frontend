@@ -16,11 +16,15 @@ import { useState } from "react";
 import { Accounts } from "./components/customer/account";
 import { Org } from "./components/organizers/organizers";
 import { useCurrentUser } from "./CurrentUserContext";
+import Event from "./components/events/event.component";
+import EventDetails from "./components/events/eventdetails.component";
+import ManageEvent from "./components/manageevent.component";
 
 
 
 function App() {
   const [name, setName] = useState('');
+  const [role, setRole] = useState('');
   const {fetchCurrentUser} = useCurrentUser();
 
   useEffect(() => {
@@ -34,6 +38,7 @@ function App() {
 
             const content = await response.json();
             setName(content.username);
+            setRole(content.role);
             fetchCurrentUser();
         }
     )();
@@ -41,14 +46,14 @@ function App() {
 
   const handleRefresh =(name)=>{
     setName(name);
-    
   }
   
   return (
     <BrowserRouter>
-       <Header name={name} setName={setName} ></Header>
+       <Header name={name} setName={setName} role={role}></Header>
     <Switch>
         <Route path="/" exact component={() => <Home name={name}/>}/>
+        <AdminRoute path="/manageevent" component={ManageEvent}/>
         <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
         <Route path="/registrate" component={Registrate} />
         <Route path="/forgot" component={Forgot} />
@@ -57,6 +62,7 @@ function App() {
         <AdminRoute path="/venue" component={Venue} />
         <AdminRoute path="/eventType" component={eventTypes} />
         <AdminRoute path="/event" component={Event} />
+        <Route path="/eventdetails/:id" component={EventDetails}/>
         <AdminRoute path="/acc" component={Accounts} />
         <AdminRoute path="/org" component={Org} />
       </Switch>
