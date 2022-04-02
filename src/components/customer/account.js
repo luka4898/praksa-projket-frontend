@@ -29,7 +29,9 @@ export class Accounts extends Component{
     }
 
     refreshList(){
-        fetch("https://localhost:7100/api/Admin/listcustomers")
+        fetch("https://localhost:7100/api/Admin/listcustomers",{
+            credentials:'include'
+        })
         .then(res=>res.json())
         .then(data=>{
             this.setState({accounts:data, accountWithoutFilter: data})

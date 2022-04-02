@@ -19,6 +19,7 @@ import { useCurrentUser } from "./CurrentUserContext";
 import Event from "./components/events/event.component";
 import EventDetails from "./components/events/eventdetails.component";
 import ManageEvent from "./components/manageevent.component";
+import { AccountView } from "./components/account/account-view.component";
 
 
 
@@ -65,6 +66,7 @@ function App() {
         <Route path="/eventdetails/:id" component={EventDetails}/>
         <AdminRoute path="/acc" component={Accounts} />
         <AdminRoute path="/org" component={Org} />
+        <Route path="/editacc" component={AccountView} />
       </Switch>
     </BrowserRouter>
   );

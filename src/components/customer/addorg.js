@@ -15,12 +15,11 @@ export class AddAcountOrg extends Component{
         fetch("https://localhost:7100/api/Authenticate/addtoorganizer",{
             method:"POST",
             headers:{
-                "Authorization":"Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvaGFzaCI6ImI3NGRkZDE0LTYzNDAtNDg0MC05NWMyLWRiMTI1NTQ4NDNlNSIsImp0aSI6ImRhZTE2OTQwLTE0YTUtNGU2Mi1hMGJkLWVkODg4YmRiN2IxZSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjQ4MjEyMjYzLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.pLggmJHW8P9kNUMv9XNniLh1uDkniVfOYq48tNuketY",
-                "expiration": "2022-03-25T12:44:23Z",
                 "Accept": "application/json",
                 "Content-Type": "application/json",
 
             },
+            credentials:'include',
             body:JSON.stringify({
                 email:e.target.email.value
             })

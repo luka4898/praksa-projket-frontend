@@ -108,6 +108,7 @@ const Registrate = () => {
                 "Accept": "*/*",
                 "Content-Type": "application/json",
             },
+            
             body: JSON.stringify({
                 username, firstname, lastname, email, address, phoneNumber, password,
             })

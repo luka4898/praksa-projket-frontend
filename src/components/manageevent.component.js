@@ -11,6 +11,7 @@ import dateFormat from "dateformat";
 import ViewEvent from "./viewevent.component";
 import AddEvent from "./addevent.component";
 import moment from "moment";
+import {AccountView} from './account/account-view.component'
 
 function withMyHook(Component) {
   return function WrappedComponent(props) {
@@ -162,6 +163,7 @@ class ManageEvent extends Component {
                 </div>
                 <div className="small font-italic text-muted mb-4">
                   {hook.currentUser.role[0]}
+                  <AccountView/>
                 </div>
               </div>
             </div>

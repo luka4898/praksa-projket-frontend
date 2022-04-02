@@ -17,7 +17,9 @@ export class Org extends Component{
     }
     
     refreshList(){
-        fetch("https://localhost:7100/api/Admin/listorganizers")
+        fetch("https://localhost:7100/api/Admin/listorganizers",{
+            credentials:'include'
+        })
         .then(res=>res.json())
         .then(data=>{
             this.setState({orgs:data, accountWithoutFilter:data})
