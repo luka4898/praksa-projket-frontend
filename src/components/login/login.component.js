@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import "../forminput";
 import { GoogleLogin } from "react-google-login";
+import FacebookLogin from 'react-facebook-login';
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
@@ -31,6 +32,23 @@ const Login = (props) => {
       const responseGoogleError = (response) => {
         console.log(response);
       };
+
+      const responseFacebook = async (response) => {
+        try {
+            const result = await axios({
+              method: "POST",
+              url: "https://localhost:7100/api/Authenticate/ExternalLoginFacebook",
+              withCredentials: true,
+              data: { idToken: response.accessToken, provider:"Facebook"}
+            });
+            setRedirect(true);
+              fetchCurrentUser();
+                  props.setName("");
+          } catch (e) {
+            console.log(e);
+          }
+        };
+      
 
     const submit = async (e) => {
         e.preventDefault();
@@ -104,14 +122,18 @@ const Login = (props) => {
     <div className="text-center m-4">
     <GoogleLogin
     clientId="115115841938-siocnn1d7h9cuvs209t0j1s3avnrmepm.apps.googleusercontent.com"
-    render={renderProps => (
-        <button onClick={renderProps.onClick} className=" btn-lg btn-google " disabled={renderProps.disabled}><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Sign In with Google</button>
-      )}
+    buttonText='Sign in with Google'
     onSuccess={responseGoogleSuccess}
     onFailure={responseGoogleError}
     cookiePolicy={"single_host_origin"}
     
   />
+  </div>
+  <div className="text-center m-4">
+  <FacebookLogin
+    appId="1045579529361738"
+    autoLoad={false}
+    callback={responseFacebook} />
   </div>
   </>
     );

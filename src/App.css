@@ -38,7 +38,7 @@
   }
 }
 
-span {
+.custom-span {
   font-size: 12px;
   padding: 3px;
   color: red;
