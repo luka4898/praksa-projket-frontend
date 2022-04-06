@@ -2,14 +2,35 @@ import React, { useState} from 'react';
 import {Redirect} from "react-router-dom";
 import { useCurrentUser } from "../../CurrentUserContext";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import "../forminput";
+import { GoogleLogin } from "react-google-login";
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const { currentUser, fetchCurrentUser } = useCurrentUser();
+    
 
+    const responseGoogleSuccess = async (response) => {
+        try {
+          const result = await axios({
+            method: "POST",
+            url: "https://localhost:7100/api/Authenticate/ExternalLogin",
+            withCredentials: true,
+            data: { idToken: response.tokenId, provider:"Google"}
+          });
+          setRedirect(true);
+            fetchCurrentUser();
+                props.setName("");
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      const responseGoogleError = (response) => {
+        console.log(response);
+      };
 
     const submit = async (e) => {
         e.preventDefault();
@@ -23,8 +44,8 @@ const Login = (props) => {
                 password
             })
         }).then((response) => {
-            let statusCode = response.status,
-                success = response.ok;
+            let statusCode = response.status;
+             let success = response.ok;
 
             response.json().then(response => {
 
@@ -46,6 +67,7 @@ const Login = (props) => {
     }
 
     return (
+        <>
         <div className="container">
 
         <form onSubmit={submit} className="text-center m-4">
@@ -77,7 +99,21 @@ const Login = (props) => {
                 <Link to={'/forgot'}>Forgot password?</Link>
             </p>
         </form>
+        
     </div>
+    <div className="text-center m-4">
+    <GoogleLogin
+    clientId="115115841938-siocnn1d7h9cuvs209t0j1s3avnrmepm.apps.googleusercontent.com"
+    render={renderProps => (
+        <button onClick={renderProps.onClick} className=" btn-lg btn-google " disabled={renderProps.disabled}><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Sign In with Google</button>
+      )}
+    onSuccess={responseGoogleSuccess}
+    onFailure={responseGoogleError}
+    cookiePolicy={"single_host_origin"}
+    
+  />
+  </div>
+  </>
     );
 };
 

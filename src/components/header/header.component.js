@@ -21,7 +21,7 @@ const Header = (props) => {
          <Nav.Link href="/manageevent">Manage Events</Nav.Link>
           <Nav.Link href="/venue">Venue</Nav.Link>
           <Nav.Link href="/city">City</Nav.Link>
-          <Nav.Link href="/event">Events</Nav.Link>
+          
         </>
       );
     }
@@ -51,6 +51,7 @@ const Header = (props) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="#">About us</Nav.Link>
+            <Nav.Link href="/event">Events</Nav.Link>
             {menu2}
           </Nav>
           <Nav>{menu}</Nav>

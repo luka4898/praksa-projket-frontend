@@ -62,7 +62,7 @@ function App() {
         <AdminRoute path="/city" component={Cities} />
         <AdminRoute path="/venue" component={Venue} />
         <AdminRoute path="/eventType" component={eventTypes} />
-        <AdminRoute path="/event" component={Event} />
+        <Route path="/event" component={Event} />
         <Route path="/eventdetails/:id" component={EventDetails}/>
         <AdminRoute path="/acc" component={Accounts} />
         <AdminRoute path="/org" component={Org} />
