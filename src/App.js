@@ -20,6 +20,7 @@ import Event from "./components/events/event.component";
 import EventDetails from "./components/events/eventdetails.component";
 import ManageEvent from "./components/manageevent.component";
 import { AccountView } from "./components/account/account-view.component";
+import Calendar from "./components/events/calendar.component";
 
 
 
@@ -58,6 +59,7 @@ function App() {
         <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
         <Route path="/registrate" component={Registrate} />
         <Route path="/forgot" component={Forgot} />
+        <Route path="/calendar" component={Calendar} />
         <Route path="/resetpassword" component={ResetPassword} />
         <AdminRoute path="/city" component={Cities} />
         <AdminRoute path="/venue" component={Venue} />

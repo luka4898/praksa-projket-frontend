@@ -3,6 +3,7 @@ import { Card, Row, Col } from "react-bootstrap";
 import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
+import ReactPaginate from 'react-paginate';
 
 class Event extends Component {
   constructor(props) {
@@ -10,12 +11,18 @@ class Event extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.getByEventType = this.getByEventType.bind(this);
     this.state = {
+      offset: 0,
+            tableData: [],
+            
+            perPage: 4,
+            currentPage: 0,
       events: [],
       types: [],
       isLoading: true,
       eventNameFilter: "",
       eventsWithoutFilter: [],
     };
+    this.handlePageClick = this.handlePageClick.bind(this);
   }
 
   FilterFn() {
@@ -28,9 +35,30 @@ class Event extends Component {
         .includes(eventNameFilter.toString().trim().toLowerCase());
     });
     this.setState({
-      events: filteredData,
+      tableData: filteredData,
     });
   }
+  handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const offset = selectedPage * this.state.perPage;
+
+    this.setState({
+        currentPage: selectedPage,
+        offset: offset
+    }, () => {
+        this.loadMoreData()
+    });
+
+};
+loadMoreData() {
+  const events = this.state.events;
+  const slice = events.slice(this.state.offset, this.state.offset + this.state.perPage)
+  this.setState({
+      pageCount: Math.ceil(events.length / this.state.perPage),
+      tableData: slice
+  })
+
+}
   fetchData = async () => {
     try {
       const [events1, types1] = await Promise.all([
@@ -45,7 +73,10 @@ class Event extends Component {
       ]);
       const events = await events1.json();
       const types = await types1.json();
+      var slice = events.slice(this.state.offset, this.state.offset + this.state.perPage)
       this.setState({
+        pageCount: Math.ceil(events.length / this.state.perPage),
+        tableData: slice,
         events: events,
         types: types,
         isLoading: false,
@@ -61,7 +92,9 @@ class Event extends Component {
     const result = this.state.eventsWithoutFilter.filter((currData) => {
       return currData.eventType.eventTypeName === evnType;
     });
-    this.setState({ events: result });
+    var slice = result.slice(this.state.offset, this.state.offset + this.state.perPage)
+    this.setState({ events:result,pageCount: Math.ceil(result.length / this.state.perPage),
+    tableData: slice,});
   };
 
   componentDidMount() {
@@ -73,7 +106,7 @@ class Event extends Component {
     this.FilterFn();
   };
   render() {
-    const { events, isLoading, types, price } = this.state;
+    const { events, isLoading, types, price, tableData } = this.state;
     return (
       <>
         {isLoading && <div className="container">Loading...</div>}
@@ -95,8 +128,8 @@ class Event extends Component {
                 <div className="row">
                   <div className="col-lg-9">
                     <Row xs={1} md={2} className="g-4">
-                      {events.length > 0 ? (
-                        events.map((evn) => (
+                      {tableData.length > 0 ? (
+                        tableData.map((evn) => (
                           <Col key={evn.currentEventId}>
                             <Card>
                               <Card.Img
@@ -134,6 +167,19 @@ class Event extends Component {
                         <div>No results </div>
                       )}
                     </Row>
+                    <ReactPaginate
+                    previousLabel={"prev"}
+                    nextLabel={"next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}
+                    initialPage={0}/>
                   </div>
                   <div className="col-lg-3">
                     <div className="card mb-4">
@@ -187,6 +233,15 @@ class Event extends Component {
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="card mb-4">
+                    <div className="card-body"> <Link
+                                    className="btn btn-info"
+                                    to="/calendar"
+                                  >
+                                   <i class="bi bi-calendar"></i> Calendar 
+                                  </Link></div>
                     </div>
                   </div>
                 </div>
