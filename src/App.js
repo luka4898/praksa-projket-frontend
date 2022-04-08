@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./components/home/home.component";
 import LogIn from "./components/login/login.component";
 import Registrate from "./components/registrate/registarte.component";
+import AdminRegistrate from "./components/registrate/admin-registarte";
+import OrganizersRegistrate from "./components/registrate/organizers-registrate";
 import { Cities } from "./components/cities/cities-view.component";
 import { eventTypes } from "./components/event-taypes/event-types.components";
 import Forgot from "./components/login/forgot.component";
@@ -21,6 +23,9 @@ import EventDetails from "./components/events/eventdetails.component";
 import ManageEvent from "./components/manageevent.component";
 import { AccountView } from "./components/account/account-view.component";
 import Calendar from "./components/events/calendar.component";
+import SendMail from './components/mail/sendmail.component'
+import SendNewsletters from "./components/mail/sendnewsletter.component";
+import Post from "./components/post/post.component";
 
 
 
@@ -58,6 +63,8 @@ function App() {
         <AdminRoute path="/manageevent" component={ManageEvent}/>
         <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
         <Route path="/registrate" component={Registrate} />
+        <AdminRoute path="/registrateadmin" component={AdminRegistrate} />
+        <AdminRoute path="/registrateorg" component={OrganizersRegistrate} />
         <Route path="/forgot" component={Forgot} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/resetpassword" component={ResetPassword} />
@@ -69,6 +76,9 @@ function App() {
         <AdminRoute path="/acc" component={Accounts} />
         <AdminRoute path="/org" component={Org} />
         <Route path="/editacc" component={AccountView} />
+        <Route path="/mail" component={SendMail}/>
+        <Route path="/newslett" component={SendNewsletters}/>
+        <Route path="/post" component={Post} />
       </Switch>
     </BrowserRouter>
   );

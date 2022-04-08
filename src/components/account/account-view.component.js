@@ -58,34 +58,14 @@ export class AccountView extends Component{
         let infoModalClose =()=>this.setState({infoModalShow:false})
         return(
             <div className="container">
-                 <div class="bg-c-green counter-block m-t-10 p-20">
-                        <div class="row">
-                        <div class="col-auto">
-                            <Button className="m-2" variant="info" onClick={() => this.setState({ infoModalShow: true, id: account.id, username: account.userName, firstname: account.firstName, lastname:account.lastName, email: account.email, address: account.address, phoneNumber: account.phoneNumber,  })}>
-                                            Info
-                     </Button>
-                            </div>
-                            <div class="col-auto">
-                            <Button className="m-2" variant="info" onClick={() => this.setState({ editModalShow: true, id: account.id, username: account.userName, firstname: account.firstName, lastname:account.lastName, email: account.email, address: account.address, phoneNumber: account.phoneNumber,  })}>
-                                            Edit
-                     </Button>
-                            </div>
-                            <div class="col-auto">
-                            <Button className="m-2" variant="info" onClick={() => this.setState({ chnageModalShow: true, id: account.id, username: account.userName })}>
-                                            Change password
-                     </Button>
-                            </div>
-                            <div class="col-auto">
-                            <Button className="m-2" variant="danger" onClick={() => this.deleteAccount(account.id) }>
-                                            Delete
-                     </Button>
-                            </div>
-                        </div>
-                    </div>
-                <Table className="mt-4" striped bordered hover size="sm">
-    
-                            
-                       <td>
+                <div class="bg-c-green counter-block m-t-10 p-20">
+                 <ul class="list-group">
+  <button class="list-group-item btn btn btn-light" onClick={() => this.setState({ infoModalShow: true, id: account.id, username: account.userName, firstname: account.firstName, lastname:account.lastName, email: account.email, address: account.address, phoneNumber: account.phoneNumber,  })}>Info</button>
+  <button class="list-group-item btn btn-light" onClick={() => this.setState({ editModalShow: true, id: account.id, username: account.userName, firstname: account.firstName, lastname:account.lastName, email: account.email, address: account.address, phoneNumber: account.phoneNumber,  })}>Edit</button>
+  <button class="list-group-item btn btn-light" onClick={() => this.setState({ chnageModalShow: true, id: account.id, username: account.userName })}>Change password</button>
+  <button class="list-group-item list-group-item-danger btn-outline-danger" onClick={() => this.deleteAccount(account.id) }>Delete</button>
+</ul></div>
+                       
                        <InfoAccount
                      refreshlist={this.refreshList}
                      show={this.state.infoModalShow}
@@ -116,8 +96,7 @@ export class AccountView extends Component{
                     show={this.state.chnageModalShow}
                     onHide={chnageModalClose}
                     />
-                    </td>
-                </Table> 
+               
                 
                 
     </div>

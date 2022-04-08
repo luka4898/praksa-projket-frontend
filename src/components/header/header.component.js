@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
-
+import { AccountView } from "../account/account-view.component";
 
 const Header = (props) => {
   const logout = async () => {
@@ -21,6 +21,17 @@ const Header = (props) => {
          <Nav.Link href="/manageevent">Manage Events</Nav.Link>
           <Nav.Link href="/venue">Venue</Nav.Link>
           <Nav.Link href="/city">City</Nav.Link>
+          <Nav.Link href="/post">Posts</Nav.Link>
+          <NavDropdown title="Admin" id="nav-dropdown">
+            <NavDropdown.Item href='/org'>Organizers List</NavDropdown.Item>
+            <NavDropdown.Item href='/acc' >Customers List</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href='/registrateadmin' >Registarte new admin</NavDropdown.Item>
+            <NavDropdown.Item href='/registrateorg'>Registrate new organizer</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/mail">Send mail</NavDropdown.Item>
+            <NavDropdown.Item href="/newslett">Send newsletter</NavDropdown.Item>
+          </NavDropdown>
           
         </>
       );
@@ -36,9 +47,14 @@ const Header = (props) => {
   } else {
     menu = (
       <>
-        <Nav.Link href="/login" onClick={logout}>
-          Logout
-        </Nav.Link>
+       <NavDropdown title={props.name} id="nav-dropdown">
+        <NavDropdown.Item></NavDropdown.Item>
+          <AccountView></AccountView>
+          
+          <NavDropdown.Item href="/login" onClick={logout}>
+          Log out
+        </NavDropdown.Item>
+      </NavDropdown>
       </>
     );
   }
