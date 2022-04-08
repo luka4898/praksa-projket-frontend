@@ -47,7 +47,24 @@ export class Org extends Component{
    /* componentDidUpdate(){
         this.refreshList();
     }*/
+    deleteAccount(accountid) {
+        if (window.confirm("Are you sure?")) {
+            fetch("https://localhost:7100/api/Authenticate/deleteaccount?id="+accountid ,{
+            method:'DELETE',    
+            credentials:'include',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    
+                },
+            })
+                .then((result) => {
+                    alert(result);
+                    this.refreshList();
 
+                })
+        }
+    }
     render(){
         const {orgs, userName, email, address, phoneNumber}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false})
@@ -78,6 +95,9 @@ export class Org extends Component{
                                     </Button>
                                     <Button className="m-2" variant="info" onClick={()=>this.setState({addModalShow:true, email:or.email })}>
                                         Remove from org 
+                                    </Button>
+                                    <Button className="m-2" variant="danger" onClick={()=>this.deleteAccount(or.id)}>
+                                        Delete
                                     </Button>
                                     <InfoAccount show={this.state.infoModalShow}
                                     onHide={infoModalClose}

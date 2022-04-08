@@ -49,7 +49,24 @@ export class Accounts extends Component{
         this.refreshList();
     }*/
 
-      
+    deleteAccount(accountid) {
+        if (window.confirm("Are you sure?")) {
+            fetch("https://localhost:7100/api/Authenticate/deleteaccount?id="+accountid ,{
+            method:'DELETE',    
+            credentials:'include',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    
+                },
+            })
+                .then((result) => {
+                    alert(result);
+                    this.refreshList();
+
+                })
+        }
+    }
     render(){
         const {accounts, userName, phoneNumber, address, email}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false})
@@ -82,6 +99,9 @@ export class Accounts extends Component{
                                     </Button>
                                     <Button className="m-2" variant="info" onClick={()=>this.setState({addModalShow:true, email:ac.email })}>
                                         Add to org 
+                                    </Button>
+                                    <Button className="m-2" variant="danger" onClick={()=>this.deleteAccount(ac.id)}>
+                                        Delete
                                     </Button>
                                     <InfoAccount show={this.state.infoModalShow}
                                     onHide={infoModalClose}
