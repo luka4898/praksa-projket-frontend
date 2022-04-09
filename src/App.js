@@ -79,6 +79,7 @@ function App() {
         <Route path="/mail" component={SendMail}/>
         <Route path="/newslett" component={SendNewsletters}/>
         <Route path="/post" component={Post} />
+        
       </Switch>
     </BrowserRouter>
   );

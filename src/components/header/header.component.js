@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 import { AccountView } from "../account/account-view.component";
 
 const Header = (props) => {
+
   const logout = async () => {
     await fetch("https://localhost:7100/api/Authenticate/logout", {
       method: "POST",
@@ -12,6 +13,7 @@ const Header = (props) => {
 
     props.setName("");
   };
+ 
   let menu;
   let menu2;
   if (props.role != null && props.role != undefined) {

@@ -163,7 +163,7 @@ class ManageEvent extends Component {
                 </div>
                 <div className="small font-italic text-muted mb-4">
                   {hook.currentUser.role[0]}
-                  <AccountView/>
+                  <AccountView />
                 </div>
               </div>
             </div>

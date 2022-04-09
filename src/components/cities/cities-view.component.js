@@ -90,7 +90,6 @@ export class Cities extends Component {
         let addModalClose = () => this.setState({ addModalShow: false })
         let editModalClose = () => this.setState({ editModalShow: false })
 
-
         return (
             <div className="container mt-4">
 
@@ -146,13 +145,15 @@ export class Cities extends Component {
                         )}
                     </tbody>
                 </Table>
+                
                 <ButtonToolbar>
                     <Button variant="primary"
                         onClick={() => this.setState({ addModalShow: true })}>
                         Add city
                     </Button>
                     <AddCities refreshlist={this.refreshList} show={this.state.addModalShow} onHide={addModalClose} />                </ButtonToolbar>
-            </div>
+                    
+        </div>
         )
     }
 }

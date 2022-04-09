@@ -84,6 +84,7 @@ export class Accounts extends Component{
                         <tr>
                             <th>Name</th>
                             <th>Last Name</th>
+                            <th>Mail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,6 +92,7 @@ export class Accounts extends Component{
                         <tr  key={ac.id}  >
                             <td>{ac.firstName}</td>
                             <td>{ac.lastName}</td>
+                            <td>{ac.email}</td>
                            
                             <td>
                                 <ButtonToolbar >

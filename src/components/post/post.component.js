@@ -12,6 +12,10 @@ class Post extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.getRole = this.getRole.bind(this);
     this.state = {
+      offset: 0,
+      tableData: [],      
+      perPage: 4,
+      currentPage: 0,
       posts: [],
       users:[],
       addModalShow: false,
@@ -19,7 +23,28 @@ class Post extends Component {
       postNameFilter: "",
       postsWithoutFilter: [],
     };
+    this.handlePageClick = this.handlePageClick.bind(this);
   }
+  handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const offset = selectedPage * this.state.perPage;
+
+    this.setState({
+        currentPage: selectedPage,
+        offset: offset
+    }, () => {
+        this.loadMoreData()
+    });
+
+};
+loadMoreData() {
+  const posts = this.state.posts;
+  const slice = posts.slice(this.state.offset, this.state.offset + this.state.perPage)
+  this.setState({
+      pageCount: Math.ceil(posts.length / this.state.perPage),
+      tableData: slice
+  })
+}
 
   FilterFn() {
     var postNameFilter = this.state.postNameFilter;
@@ -42,7 +67,10 @@ class Post extends Component {
         }),
       ]);
       const posts = await post1.json();
+      var slice = posts.slice(this.state.offset, this.state.offset + this.state.perPage)
       this.setState({
+        pageCount: Math.ceil(posts.length / this.state.perPage),
+        tableData:slice,
         posts: posts,
         isLoading: false,
         postsWithoutFilter: posts,
@@ -99,7 +127,7 @@ class Post extends Component {
 
 
   render() {
-    const { posts, isLoading, users } = this.state;
+    const { posts, isLoading, users, tableData } = this.state;
     let addModalClose = () => this.setState({ addModalShow: false })
     return (
     <>
@@ -121,31 +149,32 @@ class Post extends Component {
                         onHide={addModalClose}
                         refreshlist={this.fetchData}
                       />
-           {posts.map((pos)=>(
-           <div class="col-md-12 col-lg-12 p-1" key={pos.postId}>
-        <article class="post vt-post" >
-            <div class="row">
-                <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4">
-                    <div class="post-type post-img">
+            {tableData.length > 0 ?(
+           tableData.map((pos)=>(
+           <div className="col-md-12 col-lg-12 p-1" key={pos.postId}>
+        <article className="post vt-post" >
+            <div className="row">
+                <div className="col-xs-12 col-sm-5 col-md-5 col-lg-4">
+                    <div className="post-type post-img">
                     <Card.Img
                                 variant="top"
                                 className="card-img-top img-card-event"
                                 src={variables.PHOTO_URL + pos.imagePath}
                               />
                     </div>
-                    <div class="author-info author-info-2">
-                        <ul class="list-inline">
+                    <div className="author-info author-info-2">
+                        <ul className="list-inline">
                             <li>
-                                <div class="info">
+                                <div className="info">
                                     <p>Posted on:</p>
                                     <strong>{dateFormat(pos.createdDate, "dd.mm.yyyy")}</strong></div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8">
-                    <div class="caption">
-                        <h3 class="md-heading">{pos.title}</h3>
+                <div className="col-xs-12 col-sm-7 col-md-7 col-lg-8">
+                    <div className="caption">
+                        <h3 className="md-heading">{pos.title}</h3>
                         <p> {pos.content}</p>
                          </div>
                 </div>
@@ -159,8 +188,20 @@ class Post extends Component {
                         <hr/>
         </div>
         
-        ))}
-  
+        ))):(<div>No results</div>)}
+          <ReactPaginate
+                    previousLabel={"prev"}
+                    nextLabel={"next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}
+                    initialPage={0}/>
        </div> }
     </>           
     );
