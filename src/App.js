@@ -28,8 +28,8 @@ import SendNewsletters from "./components/mail/sendnewsletter.component";
 import SendMailHolders from "./components/mail/sendmailtoticketholders";
 import Post from "./components/post/post.component";
 import Ticket from "./components/ticket/ticket.componenet";
-
-
+import { Footer } from "./components/footer/footer.component";
+import TopEvents from "./components/topevents/topevents.component";
 function App() {
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
@@ -84,6 +84,8 @@ function App() {
         <Route path="/ticket" component={Ticket}/>
         
       </Switch>
+    
+      <Footer></Footer>
     </BrowserRouter>
   );
 }
