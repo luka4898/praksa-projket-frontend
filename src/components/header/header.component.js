@@ -16,6 +16,8 @@ const Header = (props) => {
  
   let menu;
   let menu2;
+  let menu3;
+  let menu4;
   if (props.role != null && props.role != undefined) {
     if (JSON.stringify(props.role).indexOf("Admin") > -1) {
       menu2 = (
@@ -24,6 +26,7 @@ const Header = (props) => {
           <Nav.Link href="/venue">Venue</Nav.Link>
           <Nav.Link href="/city">City</Nav.Link>
           <Nav.Link href="/post">Posts</Nav.Link>
+          <Nav.Link href="/ticket">My tickets</Nav.Link>
           <NavDropdown title="Admin" id="nav-dropdown">
             <NavDropdown.Item href='/org'>Organizers List</NavDropdown.Item>
             <NavDropdown.Item href='/acc' >Customers List</NavDropdown.Item>
@@ -33,8 +36,24 @@ const Header = (props) => {
             <NavDropdown.Divider />
             <NavDropdown.Item href="/mail">Send mail</NavDropdown.Item>
             <NavDropdown.Item href="/newslett">Send newsletter</NavDropdown.Item>
+            <NavDropdown.Item href="/mailtic">Send mail to ticket holders</NavDropdown.Item>
           </NavDropdown>
           
+        </>
+      );
+    }
+    if (JSON.stringify(props.role).indexOf("Organizer") > -1) {
+      menu3 = (
+        <>
+         <Nav.Link href="/manageevent">Manage Events</Nav.Link>
+         <Nav.Link href="/ticket">My tickets</Nav.Link>
+        </>
+      );
+    }
+    if (JSON.stringify(props.role).indexOf("Customer") > -1) {
+      menu4 = (
+        <>
+         <Nav.Link href="/ticket">My tickets</Nav.Link>
         </>
       );
     }
@@ -71,6 +90,8 @@ const Header = (props) => {
             <Nav.Link href="#">About us</Nav.Link>
             <Nav.Link href="/event">Events</Nav.Link>
             {menu2}
+            {menu3}
+            {menu4}
           </Nav>
           <Nav>{menu}</Nav>
         </Navbar.Collapse>

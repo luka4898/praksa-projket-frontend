@@ -25,8 +25,9 @@ import { AccountView } from "./components/account/account-view.component";
 import Calendar from "./components/events/calendar.component";
 import SendMail from './components/mail/sendmail.component'
 import SendNewsletters from "./components/mail/sendnewsletter.component";
+import SendMailHolders from "./components/mail/sendmailtoticketholders";
 import Post from "./components/post/post.component";
-
+import Ticket from "./components/ticket/ticket.componenet";
 
 
 function App() {
@@ -78,7 +79,9 @@ function App() {
         <Route path="/editacc" component={AccountView} />
         <Route path="/mail" component={SendMail}/>
         <Route path="/newslett" component={SendNewsletters}/>
+        <Route path="/mailtic" component={SendMailHolders}/>
         <Route path="/post" component={Post} />
+        <Route path="/ticket" component={Ticket}/>
         
       </Switch>
     </BrowserRouter>
