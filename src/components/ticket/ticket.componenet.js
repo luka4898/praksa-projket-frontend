@@ -25,21 +25,29 @@ getTicket(){
     .then(data=>{
        this.setState({tickets:data})
     })
-}
-getKod(ticketId){
-    fetch(`https://localhost:7100/api/Ticket/getticketqrcode?id=${ticketId}`,{
-        credentials:'include',
-        headers:{
-            'Accept':'applciation/json',
-           
-        }
-    })
-
-}
-
+};
 componentDidMount(){
     this.getTicket();
 }
+getRefound(id){
+    if (window.confirm("Are you sure?")) {
+        fetch(`https://localhost:7100/api/CurrentEvents/refund?id=${id}`,{
+        method:'POST',    
+        credentials:'include',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                
+            },
+        })
+            .then((result) => {
+                alert(result);
+                this.getTicket();
+
+            })
+    }
+};
+
 
 render(){
     const{tickets}=this.state;
@@ -51,8 +59,6 @@ render(){
                       
                     <article class="card fl-left">
                       <section class="date">
-                        
-                       {this.getKod(tic.ticketId)}
                        
                        <Card.Img
                                 variant="top"
@@ -74,9 +80,9 @@ render(){
                         <div class="even-info">
                           <i class="fa fa-map-marker"></i>
                           <p>
-                          What you need, is an Event, to remember for a lifetime                          </p>
+                          What you need, is an Event, to remember for a lifetime</p>
                         </div>
-                        {tic.valid ? <a className='valid'>{tic.chargeId}</a> : <a className='novalid'>{tic.chargeId}</a>}
+                        {tic.valid ? <><a className='valid'>{tic.chargeId}</a><button type="button" className='btn-secondary dugme' onClick={()=>this.getRefound(tic.chargeId)}>Refound</button></> : <a className='novalid'>{tic.chargeId}</a>}
                         
                       </section>
                     </article>
