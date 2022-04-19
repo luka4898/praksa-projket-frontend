@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,10 +6,7 @@
     box-sizing: border-box
 }
 
-body {
-    background-color: #dadde6;
-    font-family: arial
-}
+
 
 .fl-left {
     float: left
@@ -19,9 +16,9 @@ body {
     float: right
 }
 
-h1 {
-    text-transform: uppercase;
-    font-weight: 900;
+h3 {
+    
+    
     border-left: 10px solid #fec500;
     padding-left: 10px;
     margin-bottom: 30px
@@ -37,8 +34,8 @@ h1 {
     background-color: #fff;
     color: #989898;
     margin-bottom: 10px;
-    font-family: 'Oswald', sans-serif;
-    text-transform: uppercase;
+   
+    
     border-radius: 4px;
     position: relative
 }
@@ -149,19 +146,7 @@ h1 {
     right: 10%;
     bottom: 80%;
 }
-.dugme{
-    display: block;
-    text-decoration: none;
-    width: 30%;
-    height: 30px;
-    color: rgb(226, 225, 225);
-    text-align: center;
-    line-height: 30px;
-    border-radius: 2px;
-    position: absolute;
-    right: 10%;
-    bottom: 60%;
-}
+
 .valid{
     background-color: rgb(93, 170, 93);
 }

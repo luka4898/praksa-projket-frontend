@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './ticket.css';
 import {Card} from 'react-bootstrap';
 import dateFormat from 'dateformat';
 import { variables } from "../../Variables";

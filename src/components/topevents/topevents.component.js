@@ -40,18 +40,20 @@ class TopEvents extends Component{
     render(){
         const {mostexp, mostsels}=this.state;
         return(
-            <div className='container p-5'>
-                <h3>Most expensiv events</h3>
-                    <Carousel>
+          <>
+                
+                    <Carousel  >
                     {mostexp.map(evn=>
-                        <Carousel.Item>
+                        <Carousel.Item key={evn.currentEventId}>
                             <Card.Img
+                          
                             variant="top"
                             className="card-img-top img-card-event"
                             src={variables.PHOTO_URL + evn.imagePath}
                             />
                           <Carousel.Caption>
-                            <h3 className='text-dark'>{evn.eventName}</h3>
+                            <h1 >Discover different events</h1>
+                            <h2 >{evn.eventName}</h2>
                             <Link
                           to={{
                             pathname: `/eventdetails/${evn.currentEventId}`,
@@ -67,33 +69,9 @@ class TopEvents extends Component{
                         </Carousel.Item>
                         )}
                     </Carousel>      
-                    <h3>Most expensiv events</h3>
-                    <Carousel>
-                    {mostsels.map(evn=>
-                        <Carousel.Item>
-                            <Card.Img
-                            variant="top"
-                            className="card-img-top img-card-event"
-                            src={variables.PHOTO_URL + evn.imagePath}
-                            />
-                          <Carousel.Caption>
-                            <h3 className='text-dark'>{evn.eventName}</h3>
-                            <Link
-                          to={{
-                            pathname: `/eventdetails/${evn.currentEventId}`,
-                            state: {
-                              prevPath: window.location.pathname,
-                            },
-                          }}
-                          className="btn btn-secondary"
-                        >
-                          Read more →
-                        </Link>
-                          </Carousel.Caption>
-                        </Carousel.Item>
-                        )}
-                    </Carousel> 
-            </div>
+                    
+                    
+        </>
         )
     }
 }

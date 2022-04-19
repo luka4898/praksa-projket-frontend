@@ -3,7 +3,8 @@ import { Card, Row, Col } from "react-bootstrap";
 import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
+import { withRouter } from "react-router-dom";
 
 class Event extends Component {
   constructor(props) {
@@ -12,10 +13,10 @@ class Event extends Component {
     this.getByEventType = this.getByEventType.bind(this);
     this.state = {
       offset: 0,
-            tableData: [],
-            
-            perPage: 4,
-            currentPage: 0,
+      tableData: [],
+
+      perPage: 4,
+      currentPage: 0,
       events: [],
       types: [],
       isLoading: true,
@@ -42,23 +43,27 @@ class Event extends Component {
     const selectedPage = e.selected;
     const offset = selectedPage * this.state.perPage;
 
-    this.setState({
+    this.setState(
+      {
         currentPage: selectedPage,
-        offset: offset
-    }, () => {
-        this.loadMoreData()
-    });
-
-};
-loadMoreData() {
-  const events = this.state.events;
-  const slice = events.slice(this.state.offset, this.state.offset + this.state.perPage)
-  this.setState({
+        offset: offset,
+      },
+      () => {
+        this.loadMoreData();
+      }
+    );
+  };
+  loadMoreData() {
+    const events = this.state.events;
+    const slice = events.slice(
+      this.state.offset,
+      this.state.offset + this.state.perPage
+    );
+    this.setState({
       pageCount: Math.ceil(events.length / this.state.perPage),
-      tableData: slice
-  })
-
-}
+      tableData: slice,
+    });
+  }
   fetchData = async () => {
     try {
       const [events1, types1] = await Promise.all([
@@ -73,7 +78,10 @@ loadMoreData() {
       ]);
       const events = await events1.json();
       const types = await types1.json();
-      var slice = events.slice(this.state.offset, this.state.offset + this.state.perPage)
+      var slice = events.slice(
+        this.state.offset,
+        this.state.offset + this.state.perPage
+      );
       this.setState({
         pageCount: Math.ceil(events.length / this.state.perPage),
         tableData: slice,
@@ -92,9 +100,15 @@ loadMoreData() {
     const result = this.state.eventsWithoutFilter.filter((currData) => {
       return currData.eventType.eventTypeName === evnType;
     });
-    var slice = result.slice(this.state.offset, this.state.offset + this.state.perPage)
-    this.setState({ events:result,pageCount: Math.ceil(result.length / this.state.perPage),
-    tableData: slice,});
+    var slice = result.slice(
+      this.state.offset,
+      this.state.offset + this.state.perPage
+    );
+    this.setState({
+      events: result,
+      pageCount: Math.ceil(result.length / this.state.perPage),
+      tableData: slice,
+    });
   };
 
   componentDidMount() {
@@ -151,9 +165,7 @@ loadMoreData() {
                                 <Link
                                   to={{
                                     pathname: `/eventdetails/${evn.currentEventId}`,
-                                    state: {
-                                      prevPath: window.location.pathname,
-                                    },
+                                    state: { eventTypeId: evn.eventTypeId },
                                   }}
                                   className="btn btn-secondary"
                                 >
@@ -168,18 +180,19 @@ loadMoreData() {
                       )}
                     </Row>
                     <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={this.state.pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePageClick}
-                    containerClassName={"pagination"}
-                    subContainerClassName={"pages pagination"}
-                    activeClassName={"active"}
-                    initialPage={0}/>
+                      previousLabel={"prev"}
+                      nextLabel={"next"}
+                      breakLabel={"..."}
+                      breakClassName={"break-me"}
+                      pageCount={this.state.pageCount}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={this.handlePageClick}
+                      containerClassName={"pagination"}
+                      subContainerClassName={"pages pagination"}
+                      activeClassName={"active"}
+                      initialPage={0}
+                    />
                   </div>
                   <div className="col-lg-3">
                     <div className="card mb-4">
@@ -236,12 +249,12 @@ loadMoreData() {
                     </div>
 
                     <div className="card mb-4">
-                    <div className="card-body"> <Link
-                                    className="btn btn-info"
-                                    to="/calendar"
-                                  >
-                                   <i class="bi bi-calendar"></i> Calendar 
-                                  </Link></div>
+                      <div className="card-body">
+                        {" "}
+                        <Link className="btn btn-info" to="/calendar">
+                          <i class="bi bi-calendar"></i> Calendar
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -254,4 +267,4 @@ loadMoreData() {
   }
 }
 
-export default Event;
+export default withRouter(Event);

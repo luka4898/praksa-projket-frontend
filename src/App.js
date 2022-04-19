@@ -23,46 +23,50 @@ import EventDetails from "./components/events/eventdetails.component";
 import ManageEvent from "./components/manageevent.component";
 import { AccountView } from "./components/account/account-view.component";
 import Calendar from "./components/events/calendar.component";
-import SendMail from './components/mail/sendmail.component'
+import SendMail from "./components/mail/sendmail.component";
 import SendNewsletters from "./components/mail/sendnewsletter.component";
 import SendMailHolders from "./components/mail/sendmailtoticketholders";
 import Post from "./components/post/post.component";
 import Ticket from "./components/ticket/ticket.componenet";
 import { Footer } from "./components/footer/footer.component";
-import TopEvents from "./components/topevents/topevents.component";
+
+
 function App() {
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('');
-  const {fetchCurrentUser} = useCurrentUser();
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const { fetchCurrentUser } = useCurrentUser();
 
   useEffect(() => {
-    (
-        async () => {
-         
-            const response = await fetch('https://localhost:7100/api/Authenticate/loggeduser', {
-                headers: {'Content-Type': 'application/json'},
-                credentials: 'include',
-            })
-
-            const content = await response.json();
-            setName(content.username);
-            setRole(content.role);
-            fetchCurrentUser();
+    (async () => {
+      const response = await fetch(
+        "https://localhost:7100/api/Authenticate/loggeduser",
+        {
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
-    )();
-}, [name]);
+      );
 
-  const handleRefresh =(name)=>{
+      const content = await response.json();
+      setName(content.username);
+      setRole(content.role);
+      fetchCurrentUser();
+    })();
+  }, [name]);
+
+  const handleRefresh = (name) => {
     setName(name);
-  }
-  
+  };
+
   return (
     <BrowserRouter>
-       <Header name={name} setName={setName} role={role}></Header>
-    <Switch>
-        <Route path="/" exact component={() => <Home name={name}/>}/>
-        <AdminRoute path="/manageevent" component={ManageEvent}/>
-        <Route path="/login" component={() => <LogIn setName={handleRefresh}/>}/>
+      <Header name={name} setName={setName} role={role}></Header>
+      <Switch>
+        <Route path="/" exact component={() => <Home name={name} />} />
+        <AdminRoute path="/manageevent" component={ManageEvent} />
+        <Route
+          path="/login"
+          component={() => <LogIn setName={handleRefresh} />}
+        />
         <Route path="/registrate" component={Registrate} />
         <AdminRoute path="/registrateadmin" component={AdminRegistrate} />
         <AdminRoute path="/registrateorg" component={OrganizersRegistrate} />
@@ -73,18 +77,22 @@ function App() {
         <AdminRoute path="/venue" component={Venue} />
         <AdminRoute path="/eventType" component={eventTypes} />
         <Route path="/event" component={Event} />
-        <Route path="/eventdetails/:id" component={EventDetails}/>
+        <Route
+          path="/eventdetails/:id"
+          render={(props) => (
+            <EventDetails key={props.match.params.id} {...props} />
+          )}
+        />
         <AdminRoute path="/acc" component={Accounts} />
         <AdminRoute path="/org" component={Org} />
         <Route path="/editacc" component={AccountView} />
-        <Route path="/mail" component={SendMail}/>
-        <Route path="/newslett" component={SendNewsletters}/>
-        <Route path="/mailtic" component={SendMailHolders}/>
+        <Route path="/mail" component={SendMail} />
+        <Route path="/newslett" component={SendNewsletters} />
+        <Route path="/mailtic" component={SendMailHolders} />
         <Route path="/post" component={Post} />
-        <Route path="/ticket" component={Ticket}/>
-        
+        <Route path="/ticket" component={Ticket} />
       </Switch>
-    
+
       <Footer></Footer>
     </BrowserRouter>
   );

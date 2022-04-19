@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./index.css";
+import "./components/ticket/ticket.css";
 import "./components/forminput.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { CurrentUserProvider } from "./CurrentUserContext";

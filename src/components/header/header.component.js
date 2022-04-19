@@ -81,9 +81,10 @@ const Header = (props) => {
   }
 
   return (
+    
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#">Event Managment</Navbar.Brand>
+        <Navbar.Brand href="/">Event Management</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -97,6 +98,7 @@ const Header = (props) => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    
   );
 };
 
