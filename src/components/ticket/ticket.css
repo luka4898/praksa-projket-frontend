@@ -146,6 +146,19 @@ h3 {
     right: 10%;
     bottom: 80%;
 }
+.card-cont button {
+    display: block;
+    text-decoration: none;
+    width: 30%;
+    height: 30px;
+    color: rgb(226, 225, 225);
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    position: absolute;
+    right: 10%;
+    bottom: 60%;
+}
 
 .valid{
     background-color: rgb(93, 170, 93);

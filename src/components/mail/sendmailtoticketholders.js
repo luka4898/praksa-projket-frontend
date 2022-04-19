@@ -15,7 +15,7 @@ const SendMailHolders =()=>{
         const res = await fetch(`https://localhost:7100/api/Admin/sendmailtoticketholders?eventid=${event}&subject=${subject}&body=${body}`, {
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-        })
+        }).then(alert("Mail successfully filled"))
     }
 
     const getData = ()=>{
