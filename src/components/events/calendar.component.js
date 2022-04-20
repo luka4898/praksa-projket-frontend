@@ -4,6 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { OverlayTrigger } from "react-bootstrap";
 import { Popover } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
 function Event({ event }) {
 
@@ -76,9 +77,9 @@ export default function New() {
     };
   };
   return (
-    <div className="text-center container mt-4 mb-4">
-      <div className="text-center my-5">
-        <h1 className="fw-bolder">Events calendar</h1>
+    <div className="container mt-4 mb-4 card text-center">
+      <div className="my-5">
+        <h2 className="text-dark">Events calendar</h2>
       </div>
       <Calendar
         localizer={localizer}
@@ -93,6 +94,7 @@ export default function New() {
           event: Event,
         }}
       />{" "}
+     
     </div>
   );
 }

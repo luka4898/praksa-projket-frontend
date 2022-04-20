@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Carousel from "react-multi-carousel";
 import { Link } from 'react-router-dom';
-import { variables } from '../Variables';
+import { variables } from '../../Variables';
 const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },

@@ -55,16 +55,14 @@ class TopEvents extends Component{
                             <h1 >Discover different events</h1>
                             <h2 >{evn.eventName}</h2>
                             <Link
-                          to={{
-                            pathname: `/eventdetails/${evn.currentEventId}`,
-                            state: {
-                              prevPath: window.location.pathname,
-                            },
-                          }}
-                          className="btn btn-secondary"
-                        >
-                          Read more →
-                        </Link>
+                                  to={{
+                                    pathname: `/eventdetails/${evn.currentEventId}`,
+                                    state: { eventTypeId: evn.eventTypeId },
+                                  }}
+                                  className="btn btn-secondary"
+                                >
+                                  Read more →
+                                </Link>
                           </Carousel.Caption>
                         </Carousel.Item>
                         )}

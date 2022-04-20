@@ -6,12 +6,12 @@ import {
   Badge,
   ButtonGroup,
 } from "react-bootstrap";
-import { useCurrentUser } from "../CurrentUserContext";
+import { useCurrentUser } from "../../CurrentUserContext";
 import dateFormat from "dateformat";
 import ViewEvent from "./viewevent.component";
 import AddEvent from "./addevent.component";
 import moment from "moment";
-import {AccountView} from './account/account-view.component'
+import { AccountView } from "../account/account-view.component";
 
 function withMyHook(Component) {
   return function WrappedComponent(props) {

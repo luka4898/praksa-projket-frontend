@@ -1,8 +1,8 @@
 import TopEvents from "../topevents/topevents.component";
-import Blogs from "../blogs/blogs.component";
 import { withRouter } from "react-router-dom";
-import MultipleCarousel from "../multiplecarousel.component";
+import MultipleCarousel from "./multiplecarousel.component";
 import { useEffect, useState } from "react";
+import Posts from "../post/posts.component";
 const Home = (props) => {
 
   const [similarevn, setData] = useState(null);
@@ -24,7 +24,7 @@ const Home = (props) => {
         {similarevn &&
         (<>
         <TopEvents/>
-        <Blogs/>
+        <Posts history={props.history}/>
         <div className="container">
             <h3 className="m-4">Trends</h3>
          <MultipleCarousel similarevn={similarevn} history={props.history}/></div></>)}

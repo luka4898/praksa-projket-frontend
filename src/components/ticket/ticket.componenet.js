@@ -96,14 +96,14 @@ getRefound(id){
 render(){
     const{tickets, tableData}=this.state;
     return(
-        <div className='container'>
-            <h3>My tickets</h3>
+        <div className='container mt-4'>
+            <h3 className='mb-5'>My tickets</h3>
             {tableData.length > 0 ?(
             tableData.map(tic=>
-                  <div class="row" key={tic.ticketId}>
+                  <div className="row" key={tic.ticketId}>
                       
-                    <article class="card fl-left">
-                      <section class="date">
+                    <article className="card-cust fl-left">
+                      <section className="date">
                        
                        <Card.Img
                                 variant="top"
@@ -112,10 +112,10 @@ render(){
                               />
                     
                       </section>
-                      <section class="card-cont">
+                      <section className="card-cont">
                         <h3>Event manager</h3>
-                        <div class="even-date">
-                         <i class="fa fa-calendar"></i>
+                        <div className="even-date">
+                         <i className="fa fa-calendar"></i>
                          <time>
                            <span>{dateFormat(tic.start, "dd. mm. yyyy.")}</span>
                            <span>{dateFormat(tic.start, "")}</span>
@@ -123,7 +123,7 @@ render(){
                          </time>
                         </div>
                         <div class="even-info">
-                          <i class="fa fa-map-marker"></i>
+                        <i class="bi bi-geo-alt-fill"></i>
                           <p>
                           What you need, is an Event, to remember for a lifetime</p>
                         </div>
@@ -133,8 +133,8 @@ render(){
                     </article>
                     </div>)):(<div>No results</div>)}
                     <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
+                    previousLabel={"<<"}
+                    nextLabel={">>"}
                     breakLabel={"..."}
                     breakClassName={"break-me"}
                     pageCount={this.state.pageCount}
@@ -147,6 +147,7 @@ render(){
                     initialPage={0}/>   
             
         </div>
+        
     )
 
 }

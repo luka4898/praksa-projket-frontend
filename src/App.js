@@ -19,8 +19,8 @@ import { Accounts } from "./components/customer/account";
 import { Org } from "./components/organizers/organizers";
 import { useCurrentUser } from "./CurrentUserContext";
 import Event from "./components/events/event.component";
+import ManageEvent from "./components/events/manageevent.component";
 import EventDetails from "./components/events/eventdetails.component";
-import ManageEvent from "./components/manageevent.component";
 import { AccountView } from "./components/account/account-view.component";
 import Calendar from "./components/events/calendar.component";
 import SendMail from "./components/mail/sendmail.component";
@@ -29,6 +29,7 @@ import SendMailHolders from "./components/mail/sendmailtoticketholders";
 import Post from "./components/post/post.component";
 import Ticket from "./components/ticket/ticket.componenet";
 import { Footer } from "./components/footer/footer.component";
+import PostDetails from "./components/post/postdetails.component";
 
 
 function App() {
@@ -81,6 +82,12 @@ function App() {
           path="/eventdetails/:id"
           render={(props) => (
             <EventDetails key={props.match.params.id} {...props} />
+          )}
+        />
+         <Route
+          path="/postdetails/:id"
+          render={(props) => (
+            <PostDetails key={props.match.params.id} {...props} />
           )}
         />
         <AdminRoute path="/acc" component={Accounts} />

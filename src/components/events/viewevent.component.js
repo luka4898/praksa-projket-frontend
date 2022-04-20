@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal} from "react-bootstrap";
-import { variables } from "../Variables";
+import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 class ViewEvent extends Component {
 

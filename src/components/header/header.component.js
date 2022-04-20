@@ -25,7 +25,6 @@ const Header = (props) => {
          <Nav.Link href="/manageevent">Manage Events</Nav.Link>
           <Nav.Link href="/venue">Venue</Nav.Link>
           <Nav.Link href="/city">City</Nav.Link>
-          <Nav.Link href="/post">Posts</Nav.Link>
           <Nav.Link href="/ticket">My tickets</Nav.Link>
           <NavDropdown title="Admin" id="nav-dropdown">
             <NavDropdown.Item href='/org'>Organizers List</NavDropdown.Item>
@@ -90,6 +89,7 @@ const Header = (props) => {
           <Nav className="me-auto">
             <Nav.Link href="#">About us</Nav.Link>
             <Nav.Link href="/event">Events</Nav.Link>
+            <Nav.Link href="/post">Posts</Nav.Link>
             {menu2}
             {menu3}
             {menu4}

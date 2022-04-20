@@ -35,9 +35,16 @@ class Event extends Component {
         .toLowerCase()
         .includes(eventNameFilter.toString().trim().toLowerCase());
     });
+    var slice = filteredData.slice(
+      this.state.offset,
+      this.state.offset + this.state.perPage
+    );
     this.setState({
-      tableData: filteredData,
+      events: filteredData,
+      pageCount: Math.ceil(filteredData.length / this.state.perPage),
+      tableData: slice,
     });
+   
   }
   handlePageClick = (e) => {
     const selectedPage = e.selected;
@@ -67,7 +74,7 @@ class Event extends Component {
   fetchData = async () => {
     try {
       const [events1, types1] = await Promise.all([
-        fetch("https://localhost:7100/api/CurrentEvents/getallcurrentevents", {
+        fetch(`https://localhost:7100/api/CurrentEvents/getallcurrentevents?$filter=numberOfSeats gt 0`, {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         }),
@@ -127,20 +134,18 @@ class Event extends Component {
         {events && (
           <div>
             <div className="mb-4">
-              <div className="py-5 bg-light border-bottom mb-4">
-                <div className="container">
-                  <div className="text-center my-5">
-                    <h1 className="fw-bolder">Events</h1>
-                    <p className="lead mb-0">
-                      “What you need, is an Event, to remember for a lifetime.”
-                    </p>
-                  </div>
-                </div>
-              </div>
+              
 
-              <div className="container">
+              <div className="container mt-4">
                 <div className="row">
+                <h3 className="mb-5">Events</h3>
+                
                   <div className="col-lg-9">
+                  <div className="d-flex">
+               <input className="form-control mb-4"
+                   onChange={this.changeEventNameFilter}
+                   placeholder="Filter" />
+           </div>
                     <Row xs={1} md={2} className="g-4">
                       {tableData.length > 0 ? (
                         tableData.map((evn) => (
@@ -180,8 +185,8 @@ class Event extends Component {
                       )}
                     </Row>
                     <ReactPaginate
-                      previousLabel={"prev"}
-                      nextLabel={"next"}
+                      previousLabel={"<<"}
+                      nextLabel={">>"}
                       breakLabel={"..."}
                       breakClassName={"break-me"}
                       pageCount={this.state.pageCount}
@@ -195,21 +200,7 @@ class Event extends Component {
                     />
                   </div>
                   <div className="col-lg-3">
-                    <div className="card mb-4">
-                      <div className="card-header">Filter</div>
-                      <div className="card-body">
-                        <div className="input-group">
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Enter filter term..."
-                            aria-label="Enter search term..."
-                            aria-describedby="button-search"
-                            onChange={this.changeEventNameFilter}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    
 
                     <div className="card mb-4">
                       <div className="card-header">Types</div>
@@ -251,7 +242,7 @@ class Event extends Component {
                     <div className="card mb-4">
                       <div className="card-body">
                         {" "}
-                        <Link className="btn btn-info" to="/calendar">
+                        <Link className="btn btn-success" to="/calendar">
                           <i class="bi bi-calendar"></i> Calendar
                         </Link>
                       </div>

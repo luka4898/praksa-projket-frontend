@@ -6,7 +6,7 @@ import "./event.css";
 import { withRouter } from "react-router-dom";
 import Payment from "./payment.component";
 import "react-multi-carousel/lib/styles.css";
-import MultipleCarousel from "../multiplecarousel.component";
+import MultipleCarousel from "../home/multiplecarousel.component";
 
 class EventDetails extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class EventDetails extends Component {
       isPending: true,
       error: null,
       eventId: null,
-      quantity: 0,
+      quantity: 1,
       paymentModalShow: false,
     };
   }

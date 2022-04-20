@@ -54,8 +54,14 @@ loadMoreData() {
             return el.title.toString().toLowerCase().includes(postNameFilter.toString().trim().toLowerCase())
         
     });
+    var slice = filteredData.slice(
+      this.state.offset,
+      this.state.offset + this.state.perPage
+    );
     this.setState({
-        posts: filteredData,
+      posts: filteredData,
+      pageCount: Math.ceil(filteredData.length / this.state.perPage),
+      tableData: slice,
     });
   }
   fetchData = async () => {
@@ -133,6 +139,7 @@ loadMoreData() {
     <>
         {isLoading && <div className="container">Loading...</div>}
            {posts && <div className='container mt-4'>
+           <h3 className="mb-5">Posts</h3>
            <div className="d-flex">
                <input className="form-control m-2"
                    onChange={this.changePostsNameFilter}
@@ -174,7 +181,7 @@ loadMoreData() {
                 </div>
                 <div className="col-xs-12 col-sm-7 col-md-7 col-lg-8">
                     <div className="caption">
-                        <h3 className="md-heading">{pos.title}</h3>
+                        <h4 className="md-heading">{pos.title}</h4>
                         <p> {pos.content}</p>
                          </div>
                 </div>
@@ -190,8 +197,8 @@ loadMoreData() {
         
         ))):(<div>No results</div>)}
           <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
+                    previousLabel={"<<"}
+                    nextLabel={">>"}
                     breakLabel={"..."}
                     breakClassName={"break-me"}
                     pageCount={this.state.pageCount}
