@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 import Payment from "./payment.component";
 import "react-multi-carousel/lib/styles.css";
 import MultipleCarousel from "../home/multiplecarousel.component";
+import moment from "moment";
 
 class EventDetails extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class EventDetails extends Component {
       paymentModalShow: false,
     };
   }
-  
+
   fetchData = async () => {
     try {
       const [events1, similarevn1] = await Promise.all([
@@ -33,7 +34,11 @@ class EventDetails extends Component {
           }
         ),
         fetch(
-          `https://localhost:7100/api/CurrentEvents/getallcurrentevents/?$filter=currentEventId ne ${this.props.match.params.id} and eventTypeId eq ${this.props.location.state.eventTypeId}`,
+          `https://localhost:7100/api/CurrentEvents/getallcurrentevents/?$filter=currentEventId ne ${
+            this.props.match.params.id
+          } and end gt ${moment().toISOString()} and eventTypeId eq ${
+            this.props.location.state.eventTypeId
+          }`,
           {
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -60,6 +65,7 @@ class EventDetails extends Component {
 
   render() {
     const { event, isPending, error, similarevn, quantity } = this.state;
+    console.log(this.props.myHookValue);
     let paymentModalClose = () => this.setState({ paymentModalShow: false });
     return (
       <>
@@ -190,10 +196,13 @@ class EventDetails extends Component {
               </div>
             </div>
             <div className="row justify-content-center">
-            <h5 className="m-4">Similar events</h5>
+              <h5 className="m-4">Similar events</h5>
 
-            <MultipleCarousel similarevn={similarevn} history={this.props.history}/>
-          </div>
+              <MultipleCarousel
+                similarevn={similarevn}
+                history={this.props.history}
+              />
+            </div>
           </div>
         )}
       </>

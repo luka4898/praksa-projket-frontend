@@ -65,11 +65,7 @@ class CreatePost extends Component {
                 <Form onSubmit={this.handleSubmit}>
                   <Form.Group controlId="title">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control
-                      name="title"
-                      required
-                      placeholder="Title"
-                    />
+                    <Form.Control name="title" required placeholder="Title" />
                   </Form.Group>
 
                   <Form.Group controlId="content">
@@ -83,7 +79,6 @@ class CreatePost extends Component {
                     />
                   </Form.Group>
 
-
                   <Form.Group controlId="eventImage">
                     <Form.Label>Image Path</Form.Label>
                     <Form.Control
@@ -92,10 +87,8 @@ class CreatePost extends Component {
                       name="eventImage"
                       required
                       placeholder="event image"
-                      
                     />
                   </Form.Group>
-
 
                   <Form.Group>
                     <Button className="mt-4" variant="primary" type="submit">

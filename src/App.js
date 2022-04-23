@@ -10,27 +10,22 @@ import { Cities } from "./components/cities/cities-view.component";
 import { eventTypes } from "./components/event-taypes/event-types.components";
 import Forgot from "./components/login/forgot.component";
 import ResetPassword from "./components/login/resetpassword.component";
-import Venue from "./components/venues/venue.component";
 import AdminRoute from "./components/adminroute";
-import OrganizerRoute from "./components/adminroute";
+import OrganizerRoute from "./components/organizerroute";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Accounts } from "./components/customer/account";
-import { Org } from "./components/organizers/organizers";
 import { useCurrentUser } from "./CurrentUserContext";
 import Event from "./components/events/event.component";
-import ManageEvent from "./components/events/manageevent.component";
+import CustomerOrganizerRoute from "./components/customerorganizerroute";
+
 import EventDetails from "./components/events/eventdetails.component";
-import { AccountView } from "./components/account/account-view.component";
 import Calendar from "./components/events/calendar.component";
-import SendMail from "./components/mail/sendmail.component";
-import SendNewsletters from "./components/mail/sendnewsletter.component";
-import SendMailHolders from "./components/mail/sendmailtoticketholders";
-import Post from "./components/post/post.component";
-import Ticket from "./components/ticket/ticket.componenet";
 import { Footer } from "./components/footer/footer.component";
 import PostDetails from "./components/post/postdetails.component";
-
+import SidebarLayout from "./components/sidebar/sidebarlayout";
+import ManageEvent from "./components/events/manageevent.component";
+import Ticket from "./components/ticket/ticket.componenet";
+import Post from "./components/post/post.component";
 
 function App() {
   const [name, setName] = useState("");
@@ -61,43 +56,41 @@ function App() {
   return (
     <BrowserRouter>
       <Header name={name} setName={setName} role={role}></Header>
+
       <Switch>
-        <Route path="/" exact component={() => <Home name={name} />} />
-        <AdminRoute path="/manageevent" component={ManageEvent} />
+        {role != "Admin" ? (
+          <Route path="/" exact component={() => <Home name={name} />} />
+        ) : (
+          <Route path="/" component={SidebarLayout} />
+        )}
+
         <Route
           path="/login"
           component={() => <LogIn setName={handleRefresh} />}
         />
         <Route path="/registrate" component={Registrate} />
-        <AdminRoute path="/registrateadmin" component={AdminRegistrate} />
-        <AdminRoute path="/registrateorg" component={OrganizersRegistrate} />
         <Route path="/forgot" component={Forgot} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/resetpassword" component={ResetPassword} />
-        <AdminRoute path="/city" component={Cities} />
-        <AdminRoute path="/venue" component={Venue} />
+        <CustomerOrganizerRoute path="/post" component={Post} />
         <AdminRoute path="/eventType" component={eventTypes} />
+        <OrganizerRoute path="/manageevent" component={ManageEvent} />
         <Route path="/event" component={Event} />
+        <Route path="/ticket" component={Ticket} />
         <Route
           path="/eventdetails/:id"
           render={(props) => (
             <EventDetails key={props.match.params.id} {...props} />
           )}
         />
-         <Route
+        <Route
           path="/postdetails/:id"
           render={(props) => (
             <PostDetails key={props.match.params.id} {...props} />
           )}
         />
-        <AdminRoute path="/acc" component={Accounts} />
-        <AdminRoute path="/org" component={Org} />
-        <Route path="/editacc" component={AccountView} />
-        <Route path="/mail" component={SendMail} />
-        <Route path="/newslett" component={SendNewsletters} />
-        <Route path="/mailtic" component={SendMailHolders} />
-        <Route path="/post" component={Post} />
-        <Route path="/ticket" component={Ticket} />
+
+        <Route component={SidebarLayout} />
       </Switch>
 
       <Footer></Footer>

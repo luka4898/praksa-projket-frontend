@@ -5,7 +5,7 @@ import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { withRouter } from "react-router-dom";
-
+import moment from "moment";
 class Event extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +44,6 @@ class Event extends Component {
       pageCount: Math.ceil(filteredData.length / this.state.perPage),
       tableData: slice,
     });
-   
   }
   handlePageClick = (e) => {
     const selectedPage = e.selected;
@@ -74,10 +73,13 @@ class Event extends Component {
   fetchData = async () => {
     try {
       const [events1, types1] = await Promise.all([
-        fetch(`https://localhost:7100/api/CurrentEvents/getallcurrentevents?$filter=numberOfSeats gt 0`, {
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }),
+        fetch(
+          `https://localhost:7100/api/CurrentEvents/getallcurrentevents?$filter=numberOfSeats gt 0 and end gt ${moment().toISOString()}`,
+          {
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        ),
         fetch("https://localhost:7100/api/EventTypes", {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -134,18 +136,18 @@ class Event extends Component {
         {events && (
           <div>
             <div className="mb-4">
-              
-
               <div className="container mt-4">
                 <div className="row">
-                <h3 className="mb-5">Events</h3>
-                
+                  <h3 className="mb-5">Events</h3>
+
                   <div className="col-lg-9">
-                  <div className="d-flex">
-               <input className="form-control mb-4"
-                   onChange={this.changeEventNameFilter}
-                   placeholder="Filter" />
-           </div>
+                    <div className="d-flex">
+                      <input
+                        className="form-control mb-4"
+                        onChange={this.changeEventNameFilter}
+                        placeholder="Filter"
+                      />
+                    </div>
                     <Row xs={1} md={2} className="g-4">
                       {tableData.length > 0 ? (
                         tableData.map((evn) => (
@@ -161,18 +163,20 @@ class Event extends Component {
                                 <Card.Text>
                                   <small className="text-muted">
                                     {"Date: " +
-                                      dateFormat(evn.begin, "dd.mm.yyyy") +
+                                      dateFormat(evn.begin, "dd.mm.yyyy.") +
                                       " - " +
-                                      dateFormat(evn.end, "dd.mm.yyyy")}
+                                      dateFormat(evn.end, "dd.mm.yyyy.")}
                                   </small>
                                 </Card.Text>
-                                <Card.Text>{evn.content}</Card.Text>
+                                <Card.Text>
+                                  {evn.content.split(".")[0]}...
+                                </Card.Text>
                                 <Link
                                   to={{
                                     pathname: `/eventdetails/${evn.currentEventId}`,
                                     state: { eventTypeId: evn.eventTypeId },
                                   }}
-                                  className="btn btn-secondary"
+                                  className="event-link"
                                 >
                                   Read more →
                                 </Link>
@@ -200,8 +204,6 @@ class Event extends Component {
                     />
                   </div>
                   <div className="col-lg-3">
-                    
-
                     <div className="card mb-4">
                       <div className="card-header">Types</div>
                       <div className="card-body">

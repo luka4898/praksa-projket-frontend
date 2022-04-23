@@ -2,19 +2,18 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useCurrentUser } from "../CurrentUserContext";
 
-const OrganizerRoute = ({ component: Component, ...rest }) => {
-  let organizerrole = false;
+const CustomerOrganizerRoute = ({ component: Component, ...rest }) => {
+  let adminrole = false;
   const { currentUser, loading, authed } = useCurrentUser();
   if (authed) {
-    organizerrole = JSON.stringify(currentUser.role).indexOf("Organizer") > -1;
+    adminrole = JSON.stringify(currentUser.role).indexOf("Admin") > -1;
   }
-  console.log(organizerrole);
   return (
     <Route
       {...rest}
       render={(props) =>
         !loading ? (
-          authed && organizerrole ? (
+          !adminrole ? (
             <Component {...props} />
           ) : (
             <Redirect to="/" />
@@ -26,4 +25,4 @@ const OrganizerRoute = ({ component: Component, ...rest }) => {
     />
   );
 };
-export default OrganizerRoute;
+export default CustomerOrganizerRoute;

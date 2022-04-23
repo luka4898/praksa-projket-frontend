@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
 
-export class AddCities extends Component {
+export class AddAcountOrg extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -10,7 +10,7 @@ export class AddCities extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch("https://localhost:7100/api/Cities", {
+    fetch("https://localhost:7100/api/Authenticate/addtoorganizer", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -18,7 +18,7 @@ export class AddCities extends Component {
       },
       credentials: "include",
       body: JSON.stringify({
-        cityName: e.target.cityName.value,
+        email: e.target.email.value,
       }),
     }).then(
       (result) => {
@@ -32,7 +32,7 @@ export class AddCities extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div>
         <Modal
           {...this.props}
           size="lg"
@@ -48,18 +48,19 @@ export class AddCities extends Component {
             <Row>
               <Col sm={6}>
                 <Form onSubmit={this.handleSubmit}>
-                  <Form.Group controlId="cityName">
-                    <Form.Label>City Name</Form.Label>
+                  <Form.Group controlId="email">
+                    <Form.Label>Account mail</Form.Label>
                     <Form.Control
                       type="text"
-                      name="cityName"
-                      required
-                      placeholder="City Name"
+                      name="emial"
+                      disabled
+                      placeholder="Event type Name"
+                      defaultValue={this.props.email}
                     />
                   </Form.Group>
                   <Form.Group>
                     <Button variant="primary" type="submit">
-                      Add City
+                      Add to org
                     </Button>
                   </Form.Group>
                 </Form>

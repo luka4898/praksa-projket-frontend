@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
 
-export class AddCities extends Component {
+export class RemoveOrg extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -10,17 +10,20 @@ export class AddCities extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch("https://localhost:7100/api/Cities", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        cityName: e.target.cityName.value,
-      }),
-    }).then(
+    fetch(
+      "https://localhost:7100/api/Authenticate/removefromorganizeroradmin",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: e.target.email.value,
+        }),
+      }
+    ).then(
       (result) => {
         alert(result);
         this.props.refreshlist();
@@ -30,9 +33,10 @@ export class AddCities extends Component {
       }
     );
   }
+
   render() {
     return (
-      <div className="container">
+      <div>
         <Modal
           {...this.props}
           size="lg"
@@ -41,25 +45,26 @@ export class AddCities extends Component {
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
-              Add City
+              Remove from org
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Row>
               <Col sm={6}>
                 <Form onSubmit={this.handleSubmit}>
-                  <Form.Group controlId="cityName">
-                    <Form.Label>City Name</Form.Label>
+                  <Form.Group controlId="email">
+                    <Form.Label>Account mail</Form.Label>
                     <Form.Control
                       type="text"
-                      name="cityName"
-                      required
-                      placeholder="City Name"
+                      name="emial"
+                      disabled
+                      placeholder="Event type Name"
+                      defaultValue={this.props.email}
                     />
                   </Form.Group>
                   <Form.Group>
                     <Button variant="primary" type="submit">
-                      Add City
+                      Remove from org
                     </Button>
                   </Form.Group>
                 </Form>

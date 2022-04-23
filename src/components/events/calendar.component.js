@@ -7,7 +7,6 @@ import { Popover } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 
 function Event({ event }) {
-
   let popoverClickRootClose = (
     <Popover id="popover-trigger-click-root-close" style={{ zIndex: 10000 }}>
       <h5>{event.title}</h5>
@@ -16,7 +15,6 @@ function Event({ event }) {
   );
 
   return (
-    
     <div>
       <div>
         <OverlayTrigger
@@ -94,7 +92,6 @@ export default function New() {
           event: Event,
         }}
       />{" "}
-     
     </div>
   );
 }

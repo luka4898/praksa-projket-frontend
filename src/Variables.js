@@ -1,3 +1,3 @@
-export const variables={
-    PHOTO_URL:"https://localhost:7100"
-}
+export const variables = {
+  PHOTO_URL: "https://localhost:7100",
+};

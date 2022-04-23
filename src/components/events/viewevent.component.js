@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Modal} from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 class ViewEvent extends Component {
-
-
   render() {
     const { refreshlist, ...rest } = this.props;
     return (
@@ -37,13 +35,12 @@ class ViewEvent extends Component {
                       {dateFormat(this.props.begin, "dd.mm.yyyy") +
                         " - " +
                         dateFormat(this.props.end, "dd.mm.yyyy")}
-                     
                     </p>
                     <p>
-                        <b>Start time: </b>
-                        {dateFormat(this.props.begin, "HH:MM")}
-                        <b> | End time: </b>
-                        {dateFormat(this.props.end, "HH:MM")}
+                      <b>Start time: </b>
+                      {dateFormat(this.props.begin, "HH:MM")}
+                      <b> | End time: </b>
+                      {dateFormat(this.props.end, "HH:MM")}
                     </p>
 
                     <p className="mb-0">
@@ -76,9 +73,7 @@ class ViewEvent extends Component {
                 </div>
               </div>
             </div>
-       
-            
-            </Modal.Body>
+          </Modal.Body>
         </Modal>
       </div>
     );
