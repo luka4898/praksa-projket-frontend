@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 
 export class EditCities extends Component {
   constructor(props) {
@@ -21,15 +22,32 @@ export class EditCities extends Component {
         cityId: e.target.cityId.value,
         cityName: e.target.cityName.value,
       }),
-    }).then(
-      (result) => {
-        alert(result);
-        this.props.refreshlist();
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+    }).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: response.message,
+            button: "OK",
+          });
+          this.props.refreshlist();
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
+    });
   }
   render() {
     return (

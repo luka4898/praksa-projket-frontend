@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 
 export class AddAcountOrg extends Component {
   constructor(props) {
@@ -10,25 +11,48 @@ export class AddAcountOrg extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch("https://localhost:7100/api/Authenticate/addtoorganizer", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email: e.target.email.value,
-      }),
-    }).then(
-      (result) => {
-        alert(result);
-        this.props.refreshlist();
-      },
-      (error) => {
-        alert(error);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, add as org!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch("https://localhost:7100/api/Authenticate/addtoorganizer", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email: e.target.email.value,
+          }),
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Added!", response.message, "success");
+              this.props.refreshlist();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
       }
-    );
+    });
   }
   render() {
     return (
@@ -41,7 +65,7 @@ export class AddAcountOrg extends Component {
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
-              Add City
+              Add to Organizer
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>

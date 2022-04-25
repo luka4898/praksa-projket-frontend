@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 class AddVenue extends Component {
   constructor(props) {
@@ -42,7 +43,12 @@ class AddVenue extends Component {
       }),
     }).then(
       (res) => {
-        alert(res.data);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Venue added successfully!",
+          button: "OK!",
+        });
         event.target.reset();
         this.props.refreshlist();
       },

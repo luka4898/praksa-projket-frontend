@@ -7,6 +7,7 @@ import { useCurrentUser } from "../../CurrentUserContext";
 import { Redirect } from "react-router-dom";
 import { browserHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
+import Swal from "sweetalert2";
 function withMyHook(Component) {
   return function WrappedComponent(props) {
     const myHookValue = useCurrentUser();
@@ -23,7 +24,6 @@ class Payment extends Component {
     };
   }
   handleSubmit(event) {
-    console.log(this.state.user);
     if (this.state.user.authed) {
       event.preventDefault();
       let fd = new FormData();
@@ -44,16 +44,27 @@ class Payment extends Component {
         )
 
         .then((response) => {
-          alert("Payment successful");
-          event.target.reset();
-          this.props.fetchdata();
-          return response.data;
-        })
-        .catch((error) => {
-          alert(error);
+          if (response.data.split(" ")[0] != "Failed") {
+            Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: response.data,
+              button: "OK",
+            });
+            event.target.reset();
+            this.props.fetchdata();
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: response.data,
+              button: "OK!",
+            });
+          }
         });
+    } else {
+      this.props.history.push("/login");
     }
-    this.props.history.push("/login");
   }
 
   render() {

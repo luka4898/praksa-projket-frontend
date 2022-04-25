@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 
 export class RemoveOrg extends Component {
   constructor(props) {
@@ -10,28 +11,51 @@ export class RemoveOrg extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch(
-      "https://localhost:7100/api/Authenticate/removefromorganizeroradmin",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: e.target.email.value,
-        }),
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove from org!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(
+          "https://localhost:7100/api/Authenticate/removefromorganizeroradmin",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: e.target.email.value,
+            }),
+          }
+        ).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Removed!", response.message, "success");
+              this.props.refreshlist();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
       }
-    ).then(
-      (result) => {
-        alert(result);
-        this.props.refreshlist();
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+    });
   }
 
   render() {

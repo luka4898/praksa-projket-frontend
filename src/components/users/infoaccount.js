@@ -16,6 +16,7 @@ export class InfoAccount extends Component {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
+      credentials: "include",
     })
       .then((res) => res.json())
       .then(

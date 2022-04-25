@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, ButtonToolbar, Card, Table } from "react-bootstrap";
 import { AddCities } from "./addcities.comonent";
 import { EditCities } from "./editcities.component";
+import Swal from "sweetalert2";
 
 export class Cities extends Component {
   constructor(props) {
@@ -65,19 +66,45 @@ export class Cities extends Component {
      }*/
 
   deleteCity(citiid) {
-    if (window.confirm("Are you sure?")) {
-      fetch("https://localhost:7100/api/Cities/" + citiid, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch("https://localhost:7100/api/Cities/" + citiid, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.refreshList();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
 
   render() {

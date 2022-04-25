@@ -4,6 +4,9 @@ import { AccountEdit } from "./edit-account";
 import { ChangePassword } from "./changepassword";
 import { InfoAccount } from "../users/infoaccount";
 import { useCurrentUser } from "../../CurrentUserContext";
+import { withRouter } from "react-router-dom";
+
+import Swal from "sweetalert2";
 
 function withMyHook(Component) {
   return function WrappedComponent(props) {
@@ -20,6 +23,7 @@ class AccountView extends Component {
       editModalShow: false,
       chnageModalShow: false,
       infoModalShow: false,
+      redirect: false,
     };
   }
 
@@ -42,23 +46,59 @@ class AccountView extends Component {
     }*/
 
   deleteAccount(accountid) {
-    if (window.confirm("Are you sure?")) {
-      fetch(
-        "https://localhost:7100/api/Authenticate/deleteaccount?id=" + accountid,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(
+          "https://localhost:7100/api/Authenticate/deleteaccount?id=" +
+            accountid,
+          {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+
+              Swal.fire({
+                title: "Deleted!",
+                text: response.message,
+                type: "success",
+              }).then((okay) => {
+                if (okay) {
+                  window.location.href = "/login";
+                }
+              });
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
+
   render() {
     const {
       account,
@@ -170,4 +210,5 @@ class AccountView extends Component {
     );
   }
 }
+AccountView = withRouter(AccountView);
 export default withMyHook(AccountView);

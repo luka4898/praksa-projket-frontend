@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Component } from "react";
 import { Button, ButtonToolbar, Table } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 
 export class AccountEdit extends Component {
@@ -28,22 +28,32 @@ export class AccountEdit extends Component {
         address: e.target.address.value,
         phoneNumber: e.target.phoneNumber.value,
       }),
-    })
-      .then((response) => {
-        let statusCode = response.status;
-        let success = response.ok;
+    }).then((response) => {
+      let success = response.ok;
 
-        response.json().then((response) => {
+      response
+        .json()
+        .then((response) => {
           if (!success) {
             throw Error(response.message);
           }
-          alert(response.message);
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: response.message,
+            button: "OK",
+          });
           this.props.refreshlist();
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    });
   }
 
   /* componentDidUpdate(){

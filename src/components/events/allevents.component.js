@@ -10,6 +10,7 @@ import dateFormat from "dateformat";
 import ViewEvent from "./viewevent.component";
 import AddEvent from "./addevent.component";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 class AllEvents extends Component {
   constructor(props) {
@@ -68,22 +69,6 @@ class AllEvents extends Component {
     this.FilterFn();
   };
 
-  deleteFinishedEvents() {
-    if (window.confirm("Are you sure?")) {
-      fetch("https://localhost:7100/api/CurrentEvents/deletefinishedevents", {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
-  }
-
   componentDidMount() {
     this.refreshList();
   }
@@ -94,7 +79,7 @@ class AllEvents extends Component {
     return (
       <div className="container px-4 mt-4">
         <nav className="nav nav-borders">
-          <h5 className="custom-header">Events</h5>
+          <h5 className="custom-header">All Events</h5>
         </nav>
         <hr className="mt-0 mb-4" />
         <div className="row">
@@ -161,18 +146,6 @@ class AllEvents extends Component {
                           ))}
                         </tbody>
                       </Table>
-
-                      <ButtonToolbar>
-                        <ButtonGroup>
-                          <Button
-                            className="m-2"
-                            variant="danger"
-                            onClick={() => this.deleteFinishedEvents()}
-                          >
-                            Delete finished
-                          </Button>
-                        </ButtonGroup>
-                      </ButtonToolbar>
                     </div>
                   </>
                 )}

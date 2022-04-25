@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Col, Button, Card } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const SendMail = () => {
   const [subject, setSubjet] = useState("");
@@ -14,7 +15,32 @@ const SendMail = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       }
-    ).then(alert("Mail successfully filled"));
+    ).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.message,
+            button: "OK",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
+    });
   };
 
   return (

@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import dateFormat from "dateformat";
 import { variables } from "../../Variables";
 import ReactPaginate from "react-paginate";
+import Swal from "sweetalert2";
 class Ticket extends Component {
   constructor(props) {
     super(props);
@@ -81,19 +82,45 @@ class Ticket extends Component {
     this.getTicket();
   }
   getRefound(id) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`https://localhost:7100/api/CurrentEvents/refund?id=${id}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }).then((result) => {
-        alert(result);
-        this.getTicket();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(`https://localhost:7100/api/CurrentEvents/refund?id=${id}`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Success!", response.message, "success");
+              this.getTicket();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
 
   render() {

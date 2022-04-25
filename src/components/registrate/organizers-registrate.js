@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import FormInput from "../forminput";
+import Swal from "sweetalert2";
 
 const OrganizersRegistrate = () => {
   const [values, setValues] = useState({
@@ -11,6 +12,17 @@ const OrganizersRegistrate = () => {
     address: "",
     phoneNumber: "",
     password: "",
+  });
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
   });
   const inputs = [
     {
@@ -123,7 +135,13 @@ const OrganizersRegistrate = () => {
     });
     setRedirect(true);
   };
-  if (redirect) return <Redirect to="/users"></Redirect>;
+  if (redirect) {
+    Toast.fire({
+      icon: "success",
+      title: "Organizer registered successfully",
+    });
+    return <Redirect to="/"></Redirect>;
+  }
   return (
     <div className="container px-4 mt-4">
       <nav className="nav nav-borders">

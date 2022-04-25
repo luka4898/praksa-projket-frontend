@@ -3,10 +3,11 @@ import { Button, ButtonToolbar, Table, Card } from "react-bootstrap";
 import { InfoAccount } from "./infoaccount";
 import { AddAcountOrg } from "./addorg";
 import { RemoveOrg } from "./removeorg";
+import Swal from "sweetalert2";
+
 class Users extends Component {
   constructor(props) {
     super(props);
-    this.refreshList = this.refreshList.bind(this);
     this.state = {
       customers: [],
       addModalShow: false,
@@ -81,22 +82,49 @@ class Users extends Component {
   }
 
   deleteAccount(accountid) {
-    if (window.confirm("Are you sure?")) {
-      fetch(
-        "https://localhost:7100/api/Authenticate/deleteaccount?id=" + accountid,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(
+          "https://localhost:7100/api/Authenticate/deleteaccount?id=" +
+            accountid,
+          {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.refreshList();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
   render() {
     const { customers, userName, phoneNumber, address, email, organizers } =

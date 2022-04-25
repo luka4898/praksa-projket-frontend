@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Table, Button, ButtonToolbar } from "react-bootstrap";
 import AddVenue from "./addvenue.component";
 import EditVenue from "./editvenue.component";
+import Swal from "sweetalert2";
 
 class Venue extends Component {
   constructor(props) {
@@ -55,6 +56,7 @@ class Venue extends Component {
           if (!response.ok) {
             throw Error("Could not fetch that resource!");
           }
+
           return response.json();
         })
         .then((data) => {
@@ -81,19 +83,45 @@ class Venue extends Component {
   };
 
   deleteVen(venueId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`https://localhost:7100/api/Venues/${venueId}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(`https://localhost:7100/api/Venues/${venueId}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.refreshList();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
   render() {
     const {

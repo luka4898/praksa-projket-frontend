@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Col, Button } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const SendMailHolders = () => {
   const [subject, setSubjet] = useState("");
@@ -16,7 +17,32 @@ const SendMailHolders = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       }
-    ).then(alert("Mail successfully filled"));
+    ).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.message,
+            button: "OK",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
+    });
   };
 
   const getData = () => {

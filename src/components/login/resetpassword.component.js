@@ -2,13 +2,31 @@ import { useState } from "react";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-
-const ResetPassword = () => {
-  const [email, setEmail] = useState("");
+import Swal from "sweetalert2";
+const ResetPassword = (props) => {
+  const [email, setEmail] = useState(props.email);
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const addErrors = (arr) => {
+    let errors = "";
+    arr.forEach((item) => {
+      errors += item;
+    });
+    return errors;
+  };
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
   const submit = async (e) => {
     e.preventDefault();
     axios("https://localhost:7100/api/Authenticate/resetpassword", {
@@ -20,11 +38,34 @@ const ResetPassword = () => {
         confirmPassword: confirmpassword,
         token: token,
       },
-    });
-
-    setRedirect(true);
+    })
+      .then((response) => {
+        setRedirect(true);
+      })
+      .catch((errors) => {
+        if (errors.response.data.message) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: errors.response.data.message,
+            button: "OK!",
+          });
+        } else {
+          const err = errors.response.data.errors.ConfirmPassword;
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: addErrors(err),
+            button: "OK!",
+          });
+        }
+      });
   };
   if (redirect) {
+    Toast.fire({
+      icon: "success",
+      title: "Password changed successfully",
+    });
     return <Redirect to="/login" />;
   }
 
@@ -36,8 +77,8 @@ const ResetPassword = () => {
           type="email"
           className="form-control"
           placeholder="Email"
-          required
-          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          disabled
         />
         <input
           type="password"

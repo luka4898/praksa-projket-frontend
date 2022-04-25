@@ -1,6 +1,7 @@
 import React from "react";
 import { Component } from "react";
 import { Button, Modal, Row, Col, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 export class ChangePassword extends Component {
   constructor(props) {
@@ -23,15 +24,34 @@ export class ChangePassword extends Component {
         newPassword: e.target.newPassword.value,
         confirmNewPassword: e.target.confirmNewPassword.value,
       }),
-    }).then(
-      (result) => {
-        alert(result);
-        this.props.refreshlist();
-      },
-      (Error) => {
-        alert(Error);
-      }
-    );
+    }).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: response.message,
+            button: "OK",
+          });
+          this.props.refreshlist();
+        })
+
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
+    });
   }
 
   /* componentDidUpdate(){

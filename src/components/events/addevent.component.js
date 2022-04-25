@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Button, Row, Col, Form, Image } from "react-bootstrap";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 class AddEvent extends Component {
   constructor(props) {
@@ -62,13 +63,22 @@ class AddEvent extends Component {
       })
 
       .then((response) => {
-        alert("Event added successfully");
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: response.data.message,
+          button: "OK",
+        });
         event.target.reset();
         this.props.refreshlist();
-        return response.data;
       })
       .catch((error) => {
-        alert(error.response.data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response.data.message,
+          button: "OK!",
+        });
       });
   };
 

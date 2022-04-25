@@ -2,6 +2,8 @@ import { useState } from "react";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+import ResetPassword from "./resetpassword.component";
 
 const Forgot = () => {
   const [email, setEmail] = useState("");
@@ -14,12 +16,21 @@ const Forgot = () => {
       data: {
         ToEmail: email,
       },
-    });
-
-    setRedirect(true);
+    })
+      .then((response) => {
+        setRedirect(true);
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response.data.message,
+          button: "OK!",
+        });
+      });
   };
   if (redirect) {
-    return <Redirect to="/resetpassword" />;
+    return <ResetPassword email={email} />;
   }
 
   return (

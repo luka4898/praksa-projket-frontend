@@ -13,6 +13,7 @@ import ViewEvent from "./viewevent.component";
 import AddEvent from "./addevent.component";
 import moment from "moment";
 import { AccountView } from "../account/account-view.component";
+import Swal from "sweetalert2";
 
 function withMyHook(Component) {
   return function WrappedComponent(props) {
@@ -85,19 +86,45 @@ class ManageEvent extends Component {
   };
 
   deleteEvent(eventId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`https://localhost:7100/api/CurrentEvents/${eventId}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then((result) => {
-        alert(result);
-        this.refreshList();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(`https://localhost:7100/api/CurrentEvents/${eventId}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.refreshList();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
 
   componentDidMount() {
@@ -125,7 +152,7 @@ class ManageEvent extends Component {
     let viewModalClose = () => this.setState({ viewModalShow: false });
 
     return (
-      <div className="container px-4 mt-4">
+      <div className="container px-4 mt-4 mb-4">
         <nav className="nav nav-borders">
           <h5 className="custom-header">My events</h5>
         </nav>

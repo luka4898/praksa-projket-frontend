@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 
 export class AddCities extends Component {
   constructor(props) {
@@ -22,7 +23,13 @@ export class AddCities extends Component {
       }),
     }).then(
       (result) => {
-        alert(result);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "City added successfully!",
+          button: "OK!",
+        });
+        e.target.reset();
         this.props.refreshlist();
       },
       (error) => {

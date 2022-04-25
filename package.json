@@ -30,6 +30,7 @@
     "react-scripts": "5.0.0",
     "react-sidebar-web": "^0.0.16-beta",
     "react-table": "^7.7.0",
+    "sweetalert2": "^11.4.9",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },

@@ -6,6 +6,7 @@ import axios from "axios";
 import "../forminput";
 import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
+import Swal from "sweetalert2";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,17 @@ const Login = (props) => {
   const [redirect, setRedirect] = useState(false);
   const { currentUser, fetchCurrentUser } = useCurrentUser();
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
   const responseGoogleSuccess = async (response) => {
     try {
       const result = await axios({
@@ -65,7 +77,12 @@ const Login = (props) => {
 
       response.json().then((response) => {
         if (!success) {
-          alert("Unešeni korisnik ne postoji");
+          Swal.fire({
+            icon: "error",
+            title: response.title,
+            text: "User does not exist!",
+            button: "OK!",
+          });
           e.target.reset();
           return <Redirect to="/login" />;
         }
@@ -77,6 +94,10 @@ const Login = (props) => {
   };
 
   if (redirect) {
+    Toast.fire({
+      icon: "success",
+      title: "Signed in successfully",
+    });
     return <Redirect to="/" />;
   }
 

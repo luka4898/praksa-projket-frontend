@@ -8,7 +8,6 @@ const AdminRoute = ({ component: Component, ...rest }) => {
   if (authed) {
     adminrole = JSON.stringify(currentUser.role).indexOf("Admin") > -1;
   }
-  console.log(currentUser);
   return (
     <Route
       {...rest}

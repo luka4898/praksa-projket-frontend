@@ -4,6 +4,7 @@ import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 import CreatePost from "./createpost";
 import ReactPaginate from "react-paginate";
+import Swal from "sweetalert2";
 
 class Post extends Component {
   constructor(props) {
@@ -114,19 +115,45 @@ class Post extends Component {
   }
 
   deletePost(postId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`https://localhost:7100/api/Posts/${postId}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then((result) => {
-        alert(result);
-        this.fetchData();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch(`https://localhost:7100/api/Posts/${postId}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.fetchData();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
   }
 
   componentDidMount() {
