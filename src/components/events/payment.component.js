@@ -4,8 +4,6 @@ import { Modal } from "react-bootstrap";
 import moment from "moment";
 import axios from "axios";
 import { useCurrentUser } from "../../CurrentUserContext";
-import { Redirect } from "react-router-dom";
-import { browserHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 function withMyHook(Component) {

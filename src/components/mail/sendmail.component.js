@@ -3,46 +3,70 @@ import { Form, Col, Button, Card } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 const SendMail = () => {
-  const [subject, setSubjet] = useState("");
-  const [body, setBody] = useState("");
+  const [form, setForm] = useState({});
+  const [errors, setErrors] = useState({});
 
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value,
+    });
+
+    if (!!errors[field])
+      setErrors({
+        ...errors,
+        [field]: null,
+      });
+  };
+  const findFormErrors = () => {
+    const { body, subject } = form;
+    const newErrors = {};
+    if (!body || body == "") newErrors.body = "Body is required!";
+    if (!subject || subject == "") newErrors.subject = "Subject is required!";
+    return newErrors;
+  };
   const submit = async (e) => {
     e.preventDefault();
+    const newErrors = findFormErrors();
 
-    const res = await fetch(
-      `https://localhost:7100/api/Admin/sendmailtoallorganizers?subject=${subject}&body=${body}`,
-      {
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    ).then((response) => {
-      let success = response.ok;
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      const res = await fetch(
+        `https://localhost:7100/api/Admin/sendmailtoallorganizers?subject=${form.subject}&body=${form.body}`,
+        {
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      ).then((response) => {
+        let success = response.ok;
 
-      response
-        .json()
-        .then((response) => {
-          if (!success) {
-            throw Error(response.message);
-          }
-          Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: response.message,
-            button: "OK",
+        response
+          .json()
+          .then((response) => {
+            if (!success) {
+              throw Error(response.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: response.message,
+              button: "OK",
+            });
+            e.target.reset();
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              button: "OK!",
+            });
           });
-        })
-        .catch((error) => {
-          console.log(error);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error,
-            button: "OK!",
-          });
-        });
-    });
+      });
+    }
   };
-
   return (
     <div className="container px-4 mt-4">
       <nav className="nav nav-borders">
@@ -57,8 +81,12 @@ const SendMail = () => {
             name="subject"
             type="input"
             placeholder="Subject"
-            onChange={(e) => setSubjet(e.target.value)}
+            onChange={(e) => setField("subject", e.target.value)}
+            isInvalid={!!errors.subject}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.subject}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group as={Col} className="mt-2">
@@ -67,8 +95,12 @@ const SendMail = () => {
             name="body"
             as="textarea"
             rows={3}
-            onChange={(e) => setBody(e.target.value)}
+            onChange={(e) => setField("body", e.target.value)}
+            isInvalid={!!errors.body}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.body}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button variant="primary m-2" type="submit">

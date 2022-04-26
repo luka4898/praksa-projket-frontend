@@ -7,49 +7,90 @@ export class EditCities extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      errors: {},
+      form: {},
+    };
   }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    fetch("https://localhost:7100/api/Cities/" + e.target.cityId.value, {
-      method: "PUT",
-      headers: {
-        Acept: "application/json",
-        "Content-Type": "application/json",
+  setField = (field, value) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [field]: value,
       },
-      credentials: "include",
-      body: JSON.stringify({
-        cityId: e.target.cityId.value,
-        cityName: e.target.cityName.value,
-      }),
-    }).then((response) => {
-      let success = response.ok;
+    });
 
-      response
-        .json()
-        .then((response) => {
-          if (!success) {
-            throw Error(response.message);
-          }
-          Swal.fire({
-            icon: "success",
-            title: "Updated!",
-            text: response.message,
-            button: "OK",
-          });
-          this.props.refreshlist();
-        })
-        .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error,
-            button: "OK!",
-          });
-        });
+    if (!!this.state.errors[field])
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          [field]: null,
+        },
+      });
+  };
+  findFormErrors = () => {
+    const { cityName } = this.state.form;
+    const newErrors = {};
+
+    if (!cityName || cityName === "")
+      newErrors.cityName = "Name of city is required!";
+
+    return newErrors;
+  };
+  componentWillReceiveProps(props) {
+    this.setState({
+      form: {
+        cityName: props.citiname,
+      },
     });
   }
+  handleSubmit(e) {
+    e.preventDefault();
+    const newErrors = this.findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      this.setState({ errors: newErrors });
+    } else {
+      fetch("https://localhost:7100/api/Cities/" + e.target.cityId.value, {
+        method: "PUT",
+        headers: {
+          Acept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          cityId: e.target.cityId.value,
+          cityName: e.target.cityName.value,
+        }),
+      }).then((response) => {
+        let success = response.ok;
+
+        response
+          .json()
+          .then((response) => {
+            if (!success) {
+              throw Error(response.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Updated!",
+              text: response.message,
+              button: "OK",
+            });
+            this.props.refreshlist();
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              button: "OK!",
+            });
+          });
+      });
+    }
+  }
   render() {
+    const { errors } = this.state;
     return (
       <div className="container">
         <Modal
@@ -82,13 +123,19 @@ export class EditCities extends Component {
                     <Form.Control
                       type="text"
                       name="cityName"
-                      required
+                      onChange={(e) =>
+                        this.setField("cityName", e.target.value)
+                      }
+                      isInvalid={!!errors.cityName}
                       defaultValue={this.props.citiname}
                       placeholder="City Name"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cityName}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary mt-4" type="submit">
                       Update City
                     </Button>
                   </Form.Group>

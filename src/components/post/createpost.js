@@ -11,50 +11,85 @@ class CreatePost extends Component {
       selectedFile: [],
       clearable: true,
       showSelect: false,
+      errors: {},
+      form: {},
     };
   }
   fileSelectedHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] });
   };
+  setField = (field, value) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [field]: value,
+      },
+    });
+
+    if (!!this.state.errors[field])
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          [field]: null,
+        },
+      });
+  };
+  findFormErrors = () => {
+    const { content, title } = this.state.form;
+    const { selectedFile } = this.state;
+    const newErrors = {};
+
+    if (!title || title === "") newErrors.title = "Title of post is required!";
+    if (!content || content === "") newErrors.content = "Content is required!";
+    if (!selectedFile.name || selectedFile.name == "")
+      newErrors.selectedFile = "Image of post is required!";
+    return newErrors;
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const fd = new FormData();
-    fd.append(
-      "postImage",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-    fd.append("title", event.target.title.value);
-    fd.append("content", event.target.content.value);
+    const newErrors = this.findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      this.setState({ errors: newErrors });
+    } else {
+      const fd = new FormData();
+      fd.append(
+        "postImage",
+        this.state.selectedFile,
+        this.state.selectedFile.name
+      );
+      fd.append("title", event.target.title.value);
+      fd.append("content", event.target.content.value);
 
-    axios
-      .post("https://localhost:7100/api/Posts/createpost", fd, {
-        withCredentials: true,
-      })
+      axios
+        .post("https://localhost:7100/api/Posts/createpost", fd, {
+          withCredentials: true,
+        })
 
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: response.data.message,
-          button: "OK",
+        .then((response) => {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.data.message,
+            button: "OK",
+          });
+          event.target.reset();
+          this.props.refreshlist();
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.response.data.message,
+            button: "OK!",
+          });
         });
-        event.target.reset();
-        this.props.refreshlist();
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.response.data.message,
-          button: "OK!",
-        });
-      });
+    }
   };
 
   render() {
     const { refreshlist, ...rest } = this.props;
+    const { errors } = this.state;
 
     return (
       <div className="container">
@@ -75,18 +110,30 @@ class CreatePost extends Component {
                 <Form onSubmit={this.handleSubmit}>
                   <Form.Group controlId="title">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control name="title" required placeholder="Title" />
+                    <Form.Control
+                      name="title"
+                      onChange={(e) => this.setField("title", e.target.value)}
+                      isInvalid={!!errors.title}
+                      placeholder="Title"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.title}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="content">
                     <Form.Label>Content</Form.Label>
                     <Form.Control
                       name="content"
-                      required
+                      onChange={(e) => this.setField("content", e.target.value)}
+                      isInvalid={!!errors.content}
                       placeholder="Content"
                       as="textarea"
                       row={3}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.content}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="eventImage">
@@ -95,9 +142,12 @@ class CreatePost extends Component {
                       type="File"
                       onChange={this.fileSelectedHandler}
                       name="eventImage"
-                      required
+                      isInvalid={!!errors.selectedFile}
                       placeholder="event image"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.selectedFile}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group>

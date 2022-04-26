@@ -7,37 +7,71 @@ export class AddCities extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      errors: {},
+      form: {},
+    };
   }
+  setField = (field, value) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [field]: value,
+      },
+    });
 
+    if (!!this.state.errors[field])
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          [field]: null,
+        },
+      });
+  };
+  findFormErrors = () => {
+    const { cityName } = this.state.form;
+    const newErrors = {};
+
+    if (!cityName || cityName === "")
+      newErrors.cityName = "Name of city is required!";
+
+    return newErrors;
+  };
   handleSubmit(e) {
     e.preventDefault();
-    fetch("https://localhost:7100/api/Cities", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        cityName: e.target.cityName.value,
-      }),
-    }).then(
-      (result) => {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "City added successfully!",
-          button: "OK!",
-        });
-        e.target.reset();
-        this.props.refreshlist();
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+    const newErrors = this.findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      this.setState({ errors: newErrors });
+    } else {
+      fetch("https://localhost:7100/api/Cities", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          cityName: e.target.cityName.value,
+        }),
+      }).then(
+        (result) => {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "City added successfully!",
+            button: "OK!",
+          });
+          e.target.reset();
+          this.props.refreshlist();
+        },
+        (error) => {
+          alert(error);
+        }
+      );
+    }
   }
   render() {
+    const { errors } = this.state;
     return (
       <div className="container">
         <Modal
@@ -60,12 +94,18 @@ export class AddCities extends Component {
                     <Form.Control
                       type="text"
                       name="cityName"
-                      required
+                      onChange={(e) =>
+                        this.setField("cityName", e.target.value)
+                      }
+                      isInvalid={!!errors.cityName}
                       placeholder="City Name"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cityName}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary mt-4" type="submit">
                       Add City
                     </Button>
                   </Form.Group>

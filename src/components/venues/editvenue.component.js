@@ -7,10 +7,47 @@ class EditVenue extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
-      clearable: true,
       cities: [],
+      errors: {},
+      form: {},
     };
   }
+  setField = (field, value) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [field]: value,
+      },
+    });
+
+    if (!!this.state.errors[field])
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          [field]: null,
+        },
+      });
+  };
+
+  findFormErrors = () => {
+    const { venueName, cityId, capacity, address, status } = this.state.form;
+    const newErrors = {};
+
+    if (!venueName || venueName === "")
+      newErrors.venueName = "Name of venue is required!";
+    else if (venueName.length > 30)
+      newErrors.venueName = "Name of vanue is too long!";
+    if (!cityId || cityId === "") newErrors.cityId = "Select a name of city!";
+    if (!status || status === "") newErrors.status = "Select status of venue!";
+    if (!capacity || capacity == "")
+      newErrors.capacity = "Capacity is required!";
+    else if (capacity < 1)
+      newErrors.capacity = "Capacity must be greater than 0!";
+    if (!address || address === "") newErrors.address = "Address is required!";
+    else if (address.length > 50) newErrors.address = "Address is too long!";
+
+    return newErrors;
+  };
 
   componentDidMount() {
     fetch("https://localhost:7100/api/Cities", {
@@ -24,57 +61,72 @@ class EditVenue extends Component {
         });
       });
   }
-
+  componentWillReceiveProps(props) {
+    this.setState({
+      form: {
+        venueName: props.venuename,
+        cityId: props.cityid,
+        capacity: props.capacity,
+        address: props.address,
+        status: props.status,
+      },
+    });
+  }
   handleSubmit(event) {
     event.preventDefault();
+    const newErrors = this.findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      this.setState({ errors: newErrors });
+    } else {
+      const response = fetch(
+        `https://localhost:7100/api/Venues/${event.target.venueId.value}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            venueId: event.target.venueId.value,
+            venueName: event.target.venueName.value,
+            address: event.target.address.value,
+            capacity: event.target.capacity.value,
+            cityId: event.target.cityId.value,
+            status: JSON.parse(event.target.status.value),
+          }),
+        }
+      ).then((response) => {
+        let success = response.ok;
 
-    const response = fetch(
-      `https://localhost:7100/api/Venues/${event.target.venueId.value}`,
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          venueId: event.target.venueId.value,
-          venueName: event.target.venueName.value,
-          address: event.target.address.value,
-          capacity: event.target.capacity.value,
-          cityId: event.target.cityName.value,
-          status: JSON.parse(event.target.status.value),
-        }),
-      }
-    ).then((response) => {
-      let success = response.ok;
-
-      response
-        .json()
-        .then((response) => {
-          if (!success) {
-            throw Error(response.message);
-          }
-          Swal.fire({
-            icon: "success",
-            title: "Updated!",
-            text: response.message,
-            button: "OK",
+        response
+          .json()
+          .then((response) => {
+            if (!success) {
+              throw Error(response.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Updated!",
+              text: response.message,
+              button: "OK",
+            });
+            this.props.refreshlist();
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              button: "OK!",
+            });
           });
-          this.props.refreshlist();
-        })
-        .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error,
-            button: "OK!",
-          });
-        });
-    });
+      });
+    }
   }
   render() {
     const { refreshlist, ...rest } = this.props;
+    const { errors } = this.state;
     return (
       <div className="container">
         <Modal
@@ -108,21 +160,35 @@ class EditVenue extends Component {
                     <Form.Control
                       type="text"
                       name="venueName"
-                      required
+                      onChange={(e) =>
+                        this.setField("venueName", e.target.value)
+                      }
+                      isInvalid={!!errors.venueName}
                       placeholder="Venue Name"
-                      defaultValue={this.props.venuename}
+                      defaultValue={this.state.form.venueName}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.venueName}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
-                  <Form.Group controlId="cityName">
+                  <Form.Group controlId="cityId">
                     <Form.Label>City Name</Form.Label>
-                    <Form.Control as="select" defaultValue={this.props.cityid}>
+                    <Form.Control
+                      as="select"
+                      defaultValue={this.state.form.cityId}
+                      onChange={(e) => this.setField("cityId", e.target.value)}
+                      isInvalid={!!errors.cityId}
+                    >
                       {this.state.cities.map((c) => (
                         <option key={c.cityId} value={c.cityId}>
                           {c.cityName}
                         </option>
                       ))}
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cityId}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="address">
@@ -130,10 +196,14 @@ class EditVenue extends Component {
                     <Form.Control
                       type="text"
                       name="address"
-                      required
+                      onChange={(e) => this.setField("address", e.target.value)}
+                      isInvalid={!!errors.address}
                       placeholder="Address"
-                      defaultValue={this.props.address}
+                      defaultValue={this.state.form.address}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.address}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="capacity">
@@ -141,14 +211,25 @@ class EditVenue extends Component {
                     <Form.Control
                       type="number"
                       name="capacity"
-                      required
+                      onChange={(e) =>
+                        this.setField("capacity", e.target.value)
+                      }
+                      isInvalid={!!errors.capacity}
                       placeholder="Capacity"
-                      defaultValue={this.props.capacity}
+                      defaultValue={this.state.form.capacity}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.capacity}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="status">
                     <Form.Label>Status</Form.Label>
-                    <Form.Control as="select" defaultValue={this.props.status}>
+                    <Form.Control
+                      as="select"
+                      defaultValue={this.state.form.status}
+                      onChange={(e) => this.setField("status", e.target.value)}
+                      isInvalid={!!errors.status}
+                    >
                       <option key={true} value={true}>
                         true
                       </option>
@@ -156,6 +237,9 @@ class EditVenue extends Component {
                         false
                       </option>
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.status}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group>

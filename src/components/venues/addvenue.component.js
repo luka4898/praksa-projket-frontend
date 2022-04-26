@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class AddVenue extends Component {
   constructor(props) {
@@ -10,9 +11,45 @@ class AddVenue extends Component {
       selectedOption: "",
       clearable: true,
       cities: [],
+      errors: {},
+      form: {},
     };
   }
+  setField = (field, value) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [field]: value,
+      },
+    });
 
+    if (!!this.state.errors[field])
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          [field]: null,
+        },
+      });
+  };
+  findFormErrors = () => {
+    const { venueName, cityName, capacity, address } = this.state.form;
+    const newErrors = {};
+
+    if (!venueName || venueName === "")
+      newErrors.venueName = "Name of venue is required!";
+    else if (venueName.length > 30)
+      newErrors.venueName = "Name of vanue is too long!";
+    if (!cityName || cityName === "")
+      newErrors.cityName = "Select a name of city!";
+    if (!capacity || capacity == "")
+      newErrors.capacity = "Capacity is required!";
+    else if (capacity < 1)
+      newErrors.capacity = "Capacity must be greater than 0!";
+    if (!address || address === "") newErrors.address = "Address is required!";
+    else if (address.length > 50) newErrors.address = "Address is too long!";
+
+    return newErrors;
+  };
   componentDidMount() {
     fetch("https://localhost:7100/api/Cities", {
       headers: { "Content-Type": "application/json" },
@@ -28,37 +65,45 @@ class AddVenue extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    fetch("https://localhost:7100/api/Venues", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        venueName: event.target.venueName.value,
-        address: event.target.address.value,
-        capacity: event.target.capacity.value,
-        cityId: event.target.cityName.value,
-      }),
-    }).then(
-      (res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Venue added successfully!",
-          button: "OK!",
-        });
-        event.target.reset();
-        this.props.refreshlist();
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+
+    const newErrors = this.findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      this.setState({ errors: newErrors });
+    } else {
+      fetch("https://localhost:7100/api/Venues", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          venueName: event.target.venueName.value,
+          address: event.target.address.value,
+          capacity: event.target.capacity.value,
+          cityId: event.target.cityName.value,
+        }),
+      }).then(
+        (res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Venue added successfully!",
+            button: "OK!",
+          });
+          event.target.reset();
+          this.props.refreshlist();
+        },
+        (error) => {
+          alert(error);
+        }
+      );
+    }
   };
+
   render() {
     const { refreshlist, ...rest } = this.props;
+    const { errors } = this.state;
     return (
       <div className="container">
         <Modal
@@ -81,14 +126,27 @@ class AddVenue extends Component {
                     <Form.Control
                       type="text"
                       name="venueName"
-                      required
+                      onChange={(e) =>
+                        this.setField("venueName", e.target.value)
+                      }
+                      isInvalid={!!errors.venueName}
                       placeholder="Venue Name"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.venueName}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="cityName">
                     <Form.Label>City Name</Form.Label>
-                    <Form.Control as="select" defaultValue="">
+                    <Form.Control
+                      as="select"
+                      defaultValue=""
+                      onChange={(e) =>
+                        this.setField("cityName", e.target.value)
+                      }
+                      isInvalid={!!errors.cityName}
+                    >
                       <option value="" disabled>
                         --Select city name--
                       </option>
@@ -98,6 +156,9 @@ class AddVenue extends Component {
                         </option>
                       ))}
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cityName}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="address">
@@ -105,9 +166,13 @@ class AddVenue extends Component {
                     <Form.Control
                       type="text"
                       name="address"
-                      required
+                      onChange={(e) => this.setField("address", e.target.value)}
+                      isInvalid={!!errors.address}
                       placeholder="Address"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.address}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group controlId="capacity">
@@ -115,9 +180,15 @@ class AddVenue extends Component {
                     <Form.Control
                       type="number"
                       name="capacity"
-                      required
+                      onChange={(e) =>
+                        this.setField("capacity", e.target.value)
+                      }
+                      isInvalid={!!errors.capacity}
                       placeholder="Capacity"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.capacity}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group>

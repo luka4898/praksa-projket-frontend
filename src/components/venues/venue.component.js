@@ -229,6 +229,7 @@ class Venue extends Component {
                                   capacity: ven.capacity,
                                   cityName: ven.city.cityName,
                                   cityId: ven.cityId,
+                                  status: ven.status.toString(),
                                 })
                               }
                             >
