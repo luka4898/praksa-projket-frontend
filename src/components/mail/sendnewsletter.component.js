@@ -55,6 +55,8 @@ const SendNewsletters = () => {
               button: "OK",
             });
             e.target.reset();
+            setErrors({});
+            setForm({});
           })
           .catch((error) => {
             console.log(error);

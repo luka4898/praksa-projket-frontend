@@ -152,10 +152,10 @@ class Event extends Component {
                       {tableData.length > 0 ? (
                         tableData.map((evn) => (
                           <Col key={evn.currentEventId}>
-                            <Card>
+                            <Card className="card-event">
                               <Card.Img
                                 variant="top"
-                                className="card-img-top img-card-event"
+                                className="card-img-top img-card-event "
                                 src={variables.PHOTO_URL + evn.imagePath}
                               />
                               <Card.Body>
@@ -206,7 +206,7 @@ class Event extends Component {
                   <div className="col-lg-3">
                     <div className="card mb-4">
                       <div className="card-header">Types</div>
-                      <div className="card-body">
+                      <div className="card-body ">
                         <div className="row">
                           <ul className="list-unstyled mb-2">
                             <li>

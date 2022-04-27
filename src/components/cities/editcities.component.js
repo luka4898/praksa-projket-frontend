@@ -144,7 +144,13 @@ export class EditCities extends Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {} });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

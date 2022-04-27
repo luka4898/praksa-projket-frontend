@@ -126,68 +126,70 @@ class Ticket extends Component {
   render() {
     const { tickets, tableData } = this.state;
     return (
-      <div className="container mt-4">
-        <h3 className="mb-5">My tickets</h3>
-        {tableData.length > 0 ? (
-          tableData.map((tic) => (
-            <div className="row" key={tic.ticketId}>
-              <article className="card-cust fl-left">
-                <section className="date">
-                  <Card.Img
-                    className="card-body card-title img-card-event"
-                    src={variables.PHOTO_URL + tic.qrPath}
-                  />
-                </section>
-                <section className="card-cont">
-                  <h3>Event manager</h3>
-                  <div className="even-date">
-                    <i className="fa fa-calendar"></i>
-                    <time>
-                      <span>{dateFormat(tic.start, "dd. mm. yyyy.")}</span>
-                      <span>{dateFormat(tic.start, "")}</span>
-                    </time>
-                  </div>
-                  <div className="even-info">
-                    <i className="bi bi-geo-alt-fill"></i>
-                    <p>
-                      What you need, is an Event, to remember for a lifetime
-                    </p>
-                  </div>
-                  {tic.valid ? (
-                    <>
-                      <a className="valid">{tic.chargeId}</a>
-                      <button
-                        type="button"
-                        className="btn-secondary dugme"
-                        onClick={() => this.getRefound(tic.chargeId)}
-                      >
-                        Refund
-                      </button>
-                    </>
-                  ) : (
-                    <a className="novalid">{tic.chargeId}</a>
-                  )}
-                </section>
-              </article>
-            </div>
-          ))
-        ) : (
-          <div>No results</div>
-        )}
-        <ReactPaginate
-          previousLabel={"<<"}
-          nextLabel={">>"}
-          breakLabel={"..."}
-          breakClassName={"break-me"}
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={"pagination"}
-          subContainerClassName={"pages pagination"}
-          activeClassName={"active"}
-          initialPage={0}
-        />
+      <div className="container mt-4 ">
+        <div className="content-panel min-vh-100">
+          <h3 className="mb-5">My tickets</h3>
+          {tableData.length > 0 ? (
+            tableData.map((tic) => (
+              <div className="row" key={tic.ticketId}>
+                <article className="card-cust fl-left">
+                  <section className="date">
+                    <Card.Img
+                      className="card-body card-title img-card-event"
+                      src={variables.PHOTO_URL + tic.qrPath}
+                    />
+                  </section>
+                  <section className="card-cont">
+                    <h3>Event manager</h3>
+                    <div className="even-date">
+                      <i className="fa fa-calendar"></i>
+                      <time>
+                        <span>{dateFormat(tic.start, "dd. mm. yyyy.")}</span>
+                        <span>{dateFormat(tic.start, "")}</span>
+                      </time>
+                    </div>
+                    <div className="even-info">
+                      <i className="bi bi-geo-alt-fill"></i>
+                      <p>
+                        What you need, is an Event, to remember for a lifetime
+                      </p>
+                    </div>
+                    {tic.valid ? (
+                      <>
+                        <a className="valid">{tic.chargeId}</a>
+                        <button
+                          type="button"
+                          className="btn-secondary dugme"
+                          onClick={() => this.getRefound(tic.chargeId)}
+                        >
+                          Refund
+                        </button>
+                      </>
+                    ) : (
+                      <a className="novalid">{tic.chargeId}</a>
+                    )}
+                  </section>
+                </article>
+              </div>
+            ))
+          ) : (
+            <div>No results</div>
+          )}
+          <ReactPaginate
+            previousLabel={"<<"}
+            nextLabel={">>"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={this.state.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+            initialPage={0}
+          />
+        </div>
       </div>
     );
   }

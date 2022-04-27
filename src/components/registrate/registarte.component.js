@@ -88,7 +88,7 @@ const Registrate = () => {
       id: 7,
       name: "password",
       type: "password",
-      placeholder: "Password",
+      placeholder: "Password*",
       errorMessage:
         "Password should be more than 8 characters and include at least 1 lowercase and uppercase letter, 1 number and 1 special character!",
       label: "Password*",
@@ -130,9 +130,30 @@ const Registrate = () => {
         phoneNumber,
         password,
       }),
+    }).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+
+          setRedirect(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
     });
-    setRedirect(true);
   };
+
   if (redirect) {
     Toast.fire({
       icon: "success",

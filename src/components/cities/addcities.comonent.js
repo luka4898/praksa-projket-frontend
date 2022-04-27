@@ -53,21 +53,33 @@ export class AddCities extends Component {
         body: JSON.stringify({
           cityName: e.target.cityName.value,
         }),
-      }).then(
-        (result) => {
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: "City added successfully!",
-            button: "OK!",
+      }).then((response) => {
+        let success = response.ok;
+        response
+          .json()
+          .then((response) => {
+            if (!success) {
+              throw Error(response.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "City added successfully!",
+              button: "OK!",
+            });
+            e.target.reset();
+            this.setState({ errors: {}, form: {} });
+            this.props.refreshlist();
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              button: "OK!",
+            });
           });
-          e.target.reset();
-          this.props.refreshlist();
-        },
-        (error) => {
-          alert(error);
-        }
-      );
+      });
     }
   }
   render() {
@@ -114,7 +126,13 @@ export class AddCities extends Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {} });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

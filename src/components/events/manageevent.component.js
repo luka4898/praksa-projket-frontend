@@ -152,7 +152,7 @@ class ManageEvent extends Component {
     let viewModalClose = () => this.setState({ viewModalShow: false });
 
     return (
-      <div className="container px-4 mt-4 mb-4">
+      <div className="container px-4 mt-4 mb-4  min-vh-100">
         <nav className="nav nav-borders">
           <h5 className="custom-header">My events</h5>
         </nav>

@@ -13,6 +13,7 @@ import Profile from "../account/profile.component";
 import Users from "../users/users.component";
 import AdminRegistrate from "../registrate/admin-registarte";
 import OrganizersRegistrate from "../registrate/organizers-registrate";
+import { eventTypes } from "../event-taypes/event-types.components";
 const SidebarLayout = () => (
   <div className="view-account">
     <section className="module">
@@ -32,6 +33,7 @@ const SidebarLayout = () => (
               <AdminRoute path="/mailtic" component={SendMailHolders} />
               <AdminRoute path="/users" component={Users} />
               <AdminRoute path="/registrateadmin" component={AdminRegistrate} />
+              <AdminRoute path="/eventType" component={eventTypes} />
               <AdminRoute
                 path="/registrateorg"
                 component={OrganizersRegistrate}

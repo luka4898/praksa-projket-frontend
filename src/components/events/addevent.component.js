@@ -61,7 +61,7 @@ class AddEvent extends Component {
     else if (numberOfSeats < 1)
       newErrors.numberOfSeats = "Number of seats must be greater than 0!";
     if (!content || content === "") newErrors.content = "Content is required!";
-    else if (content.length > 300) newErrors.content = "Content is too long!";
+
     if (!begin || begin == "") newErrors.begin = "Start date is required!";
     if (moment(begin, "YYYY-MM-DDTHH:mm:ss.SSSZ").isBefore(moment()))
       newErrors.begin = "Start date cant be in past!";
@@ -147,6 +147,7 @@ class AddEvent extends Component {
             button: "OK",
           });
           event.target.reset();
+          this.setState({ errors: {}, form: {}, selectedFile: [] });
           this.props.refreshlist();
         })
         .catch((error) => {
@@ -198,6 +199,8 @@ class AddEvent extends Component {
                     <Form.Label>Content</Form.Label>
                     <Form.Control
                       name="content"
+                      as="textarea"
+                      rows={3}
                       onChange={(e) => this.setField("content", e.target.value)}
                       isInvalid={!!errors.content}
                       placeholder="Content"
@@ -338,7 +341,13 @@ class AddEvent extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {}, selectedFile: [] });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

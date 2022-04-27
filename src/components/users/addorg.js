@@ -40,6 +40,7 @@ export class AddAcountOrg extends Component {
                 throw Error(response.message);
               }
               Swal.fire("Added!", response.message, "success");
+              this.setState({ errors: {}, form: {} });
               this.props.refreshlist();
             })
             .catch((error) => {
@@ -92,7 +93,13 @@ export class AddAcountOrg extends Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {} });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

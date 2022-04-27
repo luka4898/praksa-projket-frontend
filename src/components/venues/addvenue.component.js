@@ -15,6 +15,7 @@ class AddVenue extends Component {
       form: {},
     };
   }
+
   setField = (field, value) => {
     this.setState({
       form: {
@@ -37,8 +38,6 @@ class AddVenue extends Component {
 
     if (!venueName || venueName === "")
       newErrors.venueName = "Name of venue is required!";
-    else if (venueName.length > 30)
-      newErrors.venueName = "Name of vanue is too long!";
     if (!cityName || cityName === "")
       newErrors.cityName = "Select a name of city!";
     if (!capacity || capacity == "")
@@ -83,21 +82,33 @@ class AddVenue extends Component {
           capacity: event.target.capacity.value,
           cityId: event.target.cityName.value,
         }),
-      }).then(
-        (res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: "Venue added successfully!",
-            button: "OK!",
+      }).then((response) => {
+        let success = response.ok;
+        response
+          .json()
+          .then((response) => {
+            if (!success) {
+              throw Error(response.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Venue added successfully!",
+              button: "OK!",
+            });
+            event.target.reset();
+            this.setState({ errors: {}, form: {} });
+            this.props.refreshlist();
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              button: "OK!",
+            });
           });
-          event.target.reset();
-          this.props.refreshlist();
-        },
-        (error) => {
-          alert(error);
-        }
-      );
+      });
     }
   };
 
@@ -112,7 +123,7 @@ class AddVenue extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
               Add Venue
             </Modal.Title>
@@ -202,7 +213,13 @@ class AddVenue extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {} });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

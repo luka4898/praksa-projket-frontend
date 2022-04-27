@@ -73,7 +73,6 @@ function App() {
         <Route path="/calendar" component={Calendar} />
         <Route path="/resetpassword" component={ResetPassword} />
         <CustomerOrganizerRoute path="/post" component={Post} />
-        <AdminRoute path="/eventType" component={eventTypes} />
         <OrganizerRoute path="/manageevent" component={ManageEvent} />
         <Route path="/event" component={Event} />
         <Route path="/ticket" component={Ticket} />

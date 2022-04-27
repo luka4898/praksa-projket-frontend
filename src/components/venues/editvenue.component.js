@@ -135,7 +135,7 @@ class EditVenue extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
               Edit Venue
             </Modal.Title>
@@ -253,7 +253,13 @@ class EditVenue extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {} });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

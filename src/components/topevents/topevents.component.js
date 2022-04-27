@@ -17,7 +17,7 @@ class TopEvents extends Component {
 
   getMostExp() {
     fetch(
-      `https://localhost:7100/api/CurrentEvents/getallcurrentevents?$filter=price gt 150`,
+      `https://localhost:7100/api/CurrentEvents/getallcurrentevents?$filter=price gt 20`,
       {
         credentials: "include",
       }
@@ -55,7 +55,6 @@ class TopEvents extends Component {
                 src={variables.PHOTO_URL + evn.imagePath}
               />
               <Carousel.Caption>
-                <h1>Discover different events</h1>
                 <h2>{evn.eventName}</h2>
                 <Link
                   to={{

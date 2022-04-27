@@ -21,7 +21,6 @@ const Header = (props) => {
     if (JSON.stringify(props.role).indexOf("Organizer") > -1) {
       menu3 = (
         <>
-          <Nav.Link href="#">About us</Nav.Link>
           <Nav.Link href="/event">Events</Nav.Link>
           <Nav.Link href="/post">Posts</Nav.Link>
           <Nav.Link href="/manageevent">Manage Events</Nav.Link>
@@ -32,7 +31,6 @@ const Header = (props) => {
     if (JSON.stringify(props.role).indexOf("Customer") > -1) {
       menu4 = (
         <>
-          <Nav.Link href="#">About us</Nav.Link>
           <Nav.Link href="/event">Events</Nav.Link>
           <Nav.Link href="/post">Posts</Nav.Link>
           <Nav.Link href="/ticket">My tickets</Nav.Link>
@@ -44,7 +42,6 @@ const Header = (props) => {
     menu2 = (
       <>
         {" "}
-        <Nav.Link href="#">About us</Nav.Link>
         <Nav.Link href="/event">Events</Nav.Link>
         <Nav.Link href="/post">Posts</Nav.Link>
       </>

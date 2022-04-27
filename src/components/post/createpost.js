@@ -74,6 +74,7 @@ class CreatePost extends Component {
             button: "OK",
           });
           event.target.reset();
+          this.setState({ errors: {}, form: {}, selectedFile: [] });
           this.props.refreshlist();
         })
         .catch((error) => {
@@ -99,7 +100,7 @@ class CreatePost extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
               Add Post
             </Modal.Title>
@@ -161,7 +162,13 @@ class CreatePost extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.onHide}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({ errors: {}, form: {}, selectedFile: [] });
+                this.props.onHide();
+              }}
+            >
               Close
             </Button>
           </Modal.Footer>

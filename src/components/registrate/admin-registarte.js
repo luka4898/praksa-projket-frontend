@@ -93,7 +93,7 @@ const AdminRegistrate = () => {
       placeholder: "Password",
       errorMessage:
         "Password should be more than 8 characters and include at least 1 lowercase and uppercase letter, 1 number and 1 special character!",
-      label: "Password",
+      label: "Password*",
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$`,
       required: true,
     },
@@ -133,8 +133,28 @@ const AdminRegistrate = () => {
         phoneNumber,
         password,
       }),
+    }).then((response) => {
+      let success = response.ok;
+
+      response
+        .json()
+        .then((response) => {
+          if (!success) {
+            throw Error(response.message);
+          }
+
+          setRedirect(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error,
+            button: "OK!",
+          });
+        });
     });
-    setRedirect(true);
   };
   if (redirect) {
     Toast.fire({
