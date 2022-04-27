@@ -150,18 +150,23 @@ const AdminRegistrate = () => {
       </nav>
       <hr className="mt-0 mb-4" />
 
-      <h4 className="text-center">Registration</h4>
-      <form onSubmit={submit} className="text-center m-4">
-        {inputs.map((input) => (
-          <FormInput
-            key={input.id}
-            {...input}
-            value={values[input.name]}
-            onChange={onChange}
-          />
-        ))}
-        <button className="custom-button">Submit</button>
-      </form>
+      <div class="row">
+        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
+          <h5 class=" text-center mb-5 mt-2 fw-light fs-5">Register</h5>
+
+          <form onSubmit={submit} className="text-center m-4 ">
+            {inputs.map((input) => (
+              <FormInput
+                key={input.id}
+                {...input}
+                value={values[input.name]}
+                onChange={onChange}
+              />
+            ))}
+            <button className="custom-button">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

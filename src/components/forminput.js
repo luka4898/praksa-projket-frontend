@@ -11,16 +11,17 @@ const FormInput = (props) => {
   };
 
   return (
-    <div className="form-group justify-content-center">
-      <label className="m-2 custom-label">{label}</label>
+    <div class="form-floating mb-3">
       <input
-        className="custom-input"
+        class="form-control"
         {...inputProps}
         onChange={onChange}
         onBlur={handleFocus}
         onFocus={() => inputProps.name === "password" && setFocused(true)}
         focused={focused.toString()}
+        style={{ height: 55 }}
       />
+      <label for="floatingInput">{label}</label>
       <span className="custom-span">{errorMessage}</span>
     </div>
   );

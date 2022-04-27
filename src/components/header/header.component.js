@@ -51,7 +51,7 @@ const Header = (props) => {
     );
     menu = (
       <>
-        <Nav.Link href="/login">Log in</Nav.Link>
+        <Nav.Link href="/login">Sign in</Nav.Link>
         <Nav.Link href="/registrate">Registrate</Nav.Link>
       </>
     );

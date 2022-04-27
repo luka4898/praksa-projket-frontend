@@ -1595,4 +1595,23 @@ figcaption .project-creator {
   .view-account .side-bar .side-menu li:hover .sub-arrow:after {
     content: "\2039";
   }
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+  .google-btn {
+    background-color: #dd4b39;
+    border-radius: 2px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+    color: white;
+  }
+
+  .btn-facebook {
+    color: white !important;
+    background-color: #3b5998;
+
+    border-radius: 2px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+  }
 }

@@ -93,7 +93,15 @@ function App() {
         <Route component={SidebarLayout} />
       </Switch>
 
-      <Footer></Footer>
+      <Route
+        path="/"
+        render={(props) =>
+          props.location.pathname !== "/login" &&
+          props.location.pathname !== "/registrate" &&
+          props.location.pathname !== "/forgot" &&
+          props.location.pathname !== "/resetpassword" && <Footer />
+        }
+      ></Route>
     </BrowserRouter>
   );
 }

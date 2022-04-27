@@ -3,12 +3,52 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import FormInput from "../forminput";
 const ResetPassword = (props) => {
   const [email, setEmail] = useState(props.email);
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const [token, setToken] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [values, setValues] = useState({
+    token: "",
+    password: "",
+    confirmpassword: "",
+  });
+  const inputs = [
+    {
+      id: 1,
+      name: "token",
+      type: "text",
+      placeholder: "Token",
+      errorMessage: "Token is required!",
+      label: "Token",
+      pattern: ".{1,}",
+      required: true,
+    },
+
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      errorMessage:
+        "Password should be more than 8 characters and include at least 1 lowercase and uppercase letter, 1 number and 1 special character!",
+      label: "Password*",
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$`,
+      required: true,
+    },
+    {
+      id: 3,
+      name: "confirmpassword",
+      type: "password",
+      placeholder: "Confirm password",
+      errorMessage: "Confirm password is required!",
+      label: "Confirm password",
+      pattern: ".{1,}",
+      required: true,
+    },
+  ];
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
   const addErrors = (arr) => {
     let errors = "";
     arr.forEach((item) => {
@@ -29,6 +69,7 @@ const ResetPassword = (props) => {
   });
   const submit = async (e) => {
     e.preventDefault();
+    const { password, confirmpassword, token } = values;
     axios("https://localhost:7100/api/Authenticate/resetpassword", {
       method: "POST",
       header: { "Context-type": "application/json" },
@@ -71,41 +112,42 @@ const ResetPassword = (props) => {
 
   return (
     <div className="container">
-      <form onSubmit={submit}>
-        <h1 className="h3 mb-3 fw-normal">Please log in</h1>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Email"
-          value={email}
-          disabled
-        />
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Password"
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Confirm password"
-          required
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Token"
-          required
-          onChange={(e) => setToken(e.target.value)}
-        />
+      <div className="row">
+        <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div className="card border-0 shadow rounded-3 my-5">
+            <div className="card-body p-4 p-sm-5">
+              <h5 className="card-title text-center mb-5 fw-light fs-5">
+                Reset Password
+              </h5>
+              <form onSubmit={submit}>
+                <div className="form-floating mb-3">
+                  <input
+                    type="email"
+                    className="form-control"
+                    disabled
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    value={email}
+                  />
+                  <label for="floatingInput">Email address</label>
+                </div>
+                {inputs.map((input) => (
+                  <FormInput
+                    key={input.id}
+                    {...input}
+                    value={values[input.name]}
+                    onChange={onChange}
+                  />
+                ))}
 
-        <button className="w-100 btn btn-lg btn-primary" type="submit">
-          Submit
-        </button>
-      </form>
+                <button className="w-100 btn  btn-primary" type="submit">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

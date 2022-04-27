@@ -91,7 +91,7 @@ const Registrate = () => {
       placeholder: "Password",
       errorMessage:
         "Password should be more than 8 characters and include at least 1 lowercase and uppercase letter, 1 number and 1 special character!",
-      label: "Password",
+      label: "Password*",
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$`,
       required: true,
     },
@@ -141,19 +141,39 @@ const Registrate = () => {
     return <Redirect to="/login"></Redirect>;
   }
   return (
-    <div className="container">
-      <form onSubmit={submit} className="text-center m-4">
-        <h1 className="text-center">Register</h1>
-        {inputs.map((input) => (
-          <FormInput
-            key={input.id}
-            {...input}
-            value={values[input.name]}
-            onChange={onChange}
-          />
-        ))}
-        <button className="custom-button">Submit</button>
-      </form>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
+          <div class="card border-0 shadow rounded-3 my-5">
+            <div class="card-body p-4 p-sm-5">
+              <h5 class="card-title text-center mb-5 fw-light fs-5">
+                Register
+              </h5>
+              <form onSubmit={submit} className="text-center m-5">
+                {inputs.map((input) => (
+                  <FormInput
+                    key={input.id}
+                    {...input}
+                    value={values[input.name]}
+                    onChange={onChange}
+                  />
+                ))}
+                <div class="d-grid mt-5 mb-2">
+                  <button className="btn btn-primary p-2" type="submit">
+                    Register
+                  </button>
+                </div>
+                <p class="text-center text-muted mt-3 mb-0">
+                  Have already an account?{" "}
+                  <a href="/login" class="fw-bold text-body">
+                    <u>Login here</u>
+                  </a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
