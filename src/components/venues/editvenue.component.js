@@ -196,9 +196,9 @@ class EditVenue extends Component {
                     <Form.Control
                       type="text"
                       name="address"
+                      placeholder="Address"
                       onChange={(e) => this.setField("address", e.target.value)}
                       isInvalid={!!errors.address}
-                      placeholder="Address"
                       defaultValue={this.state.form.address}
                     />
                     <Form.Control.Feedback type="invalid">
