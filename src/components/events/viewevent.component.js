@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { variables } from "../../Variables";
 import dateFormat from "dateformat";
 class ViewEvent extends Component {
   render() {
     const { refreshlist, ...rest } = this.props;
     return (
-      <div className="container">
+      <>
         <Modal
           {...rest}
           size="xl"
-          aria-labelledby="contained-modal-title-vcenter"
+          aria-labelledby="contained-modal-title-vcenter "
           centered
         >
           <Modal.Header closeButton>
@@ -74,8 +74,13 @@ class ViewEvent extends Component {
               </div>
             </div>
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={this.props.onHide}>
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
-      </div>
+      </>
     );
   }
 }

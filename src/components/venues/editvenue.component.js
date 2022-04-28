@@ -35,8 +35,6 @@ class EditVenue extends Component {
 
     if (!venueName || venueName === "")
       newErrors.venueName = "Name of venue is required!";
-    else if (venueName.length > 30)
-      newErrors.venueName = "Name of vanue is too long!";
     if (!cityId || cityId === "") newErrors.cityId = "Select a name of city!";
     if (!status || status === "") newErrors.status = "Select status of venue!";
     if (!capacity || capacity == "")
@@ -44,7 +42,6 @@ class EditVenue extends Component {
     else if (capacity < 1)
       newErrors.capacity = "Capacity must be greater than 0!";
     if (!address || address === "") newErrors.address = "Address is required!";
-    else if (address.length > 50) newErrors.address = "Address is too long!";
 
     return newErrors;
   };

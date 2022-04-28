@@ -3,6 +3,8 @@ import { Modal, Button, Row, Col, Form, Image } from "react-bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
+import AvailableVenues from "./availablevenues";
+import dateFormat from "dateformat";
 
 class AddEvent extends Component {
   constructor(props) {
@@ -16,6 +18,8 @@ class AddEvent extends Component {
       showSelect: false,
       errors: {},
       form: {},
+      check: false,
+      vens: null,
     };
   }
   setField = (field, value) => {
@@ -91,7 +95,11 @@ class AddEvent extends Component {
   fileSelectedHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] });
   };
-
+  getVens = (vens) => {
+    this.setState({ vens: null });
+    this.setField("venueName", null);
+    this.setState({ vens: vens });
+  };
   componentDidMount() {
     fetch("https://localhost:7100/api/EventTypes", {
       credentials: "include",
@@ -148,6 +156,7 @@ class AddEvent extends Component {
           });
           event.target.reset();
           this.setState({ errors: {}, form: {}, selectedFile: [] });
+          this.setState(({ check }) => ({ check: !check, vens: null }));
           this.props.refreshlist();
         })
         .catch((error) => {
@@ -162,7 +171,8 @@ class AddEvent extends Component {
   };
   render() {
     const { refreshlist, ...rest } = this.props;
-    const { errors } = this.state;
+    const { errors, check, vens } = this.state;
+    const { end, begin } = this.state.form;
     return (
       <div className="container">
         <Modal
@@ -171,7 +181,7 @@ class AddEvent extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
               Add Event
             </Modal.Title>
@@ -305,30 +315,54 @@ class AddEvent extends Component {
                       {errors.eventTypeName}
                     </Form.Control.Feedback>
                   </Form.Group>
-
-                  <Form.Group controlId="venueName">
-                    <Form.Label>Venue</Form.Label>
-                    <Form.Control
-                      as="select"
-                      defaultValue=""
-                      onChange={(e) =>
-                        this.setField("venueName", e.target.value)
-                      }
-                      isInvalid={!!errors.venueName}
-                    >
-                      <option value="" disabled>
-                        --Select name of venue--
-                      </option>
-                      {this.state.venues.map((v) => (
-                        <option key={v.venueId} value={v.venueId}>
-                          {v.venueName}
-                        </option>
-                      ))}
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.venueName}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                  {end && begin && (
+                    <>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value="check"
+                          onChange={(e) =>
+                            this.setState(({ check }) => ({ check: !check }))
+                          }
+                        />{" "}
+                        Validate venue{" "}
+                      </label>
+                    </>
+                  )}
+                  {check === true && (
+                    <AvailableVenues
+                      end={dateFormat(end, "mm.dd.yyyy.")}
+                      begin={dateFormat(begin, "mm.dd.yyyy.")}
+                      getvens={this.getVens}
+                    />
+                  )}
+                  {check && vens && (
+                    <>
+                      <Form.Group controlId="venueName">
+                        <Form.Label>Venue</Form.Label>
+                        <Form.Control
+                          as="select"
+                          defaultValue=""
+                          onChange={(e) =>
+                            this.setField("venueName", e.target.value)
+                          }
+                          isInvalid={!!errors.venueName}
+                        >
+                          <option value="" disabled>
+                            --Select name of venue--
+                          </option>
+                          {vens.map((v) => (
+                            <option key={v.venueId} value={v.venueId}>
+                              {v.venueName}
+                            </option>
+                          ))}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.venueName}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </>
+                  )}
 
                   <Form.Group>
                     <Button className="mt-4" variant="primary" type="submit">
@@ -344,7 +378,12 @@ class AddEvent extends Component {
             <Button
               variant="danger"
               onClick={() => {
-                this.setState({ errors: {}, form: {}, selectedFile: [] });
+                this.setState({
+                  errors: {},
+                  form: {},
+                  selectedFile: [],
+                  check: false,
+                });
                 this.props.onHide();
               }}
             >
