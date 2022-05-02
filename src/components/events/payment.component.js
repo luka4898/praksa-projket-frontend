@@ -216,7 +216,7 @@ class Payment extends Component {
                       <div className="d-flex justify-content-between mb-1 small">
                         <b>Subtotal</b>{" "}
                         <strong className="text-dark">
-                          {this.props.price} $
+                          {this.props.price} BAM
                         </strong>
                       </div>
                       <div className="d-flex justify-content-between mb-1 small">
@@ -229,7 +229,7 @@ class Payment extends Component {
                       <div className="d-flex justify-content-between mb-4 small">
                         <b>TOTAL</b>{" "}
                         <strong className="text-dark">
-                          {+this.props.price * +this.props.quantity} $
+                          {+this.props.price * +this.props.quantity} BAM
                         </strong>
                       </div>
                       <div>

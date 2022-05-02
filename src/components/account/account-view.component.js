@@ -115,12 +115,12 @@ class AccountView extends Component {
     let infoModalClose = () => this.setState({ infoModalShow: false });
     return (
       <div className="container">
-        <div class="bg-c-green counter-block m-t-10 p-20">
-          <ul class="list-group">
+        <div className="bg-c-green counter-block m-t-10 p-20">
+          <ul className="list-group">
             {this.props.myHookValue.currentUser.role[0] != "Admin" && (
               <>
                 <button
-                  class="list-group-item btn btn btn-light"
+                  className="list-group-item btn btn btn-light"
                   onClick={() =>
                     this.setState({
                       infoModalShow: true,
@@ -137,7 +137,7 @@ class AccountView extends Component {
                   Info
                 </button>
                 <button
-                  class="list-group-item btn btn-light"
+                  className="list-group-item btn btn-light"
                   onClick={() =>
                     this.setState({
                       editModalShow: true,
@@ -156,7 +156,7 @@ class AccountView extends Component {
               </>
             )}
             <button
-              class="list-group-item btn btn-light"
+              className="list-group-item btn btn-light"
               onClick={() =>
                 this.setState({
                   chnageModalShow: true,
@@ -168,7 +168,7 @@ class AccountView extends Component {
               Change password
             </button>
             <button
-              class="list-group-item list-group-item-danger btn-outline-danger"
+              className="list-group-item list-group-item-danger btn-outline-danger"
               onClick={() => this.deleteAccount(account.id)}
             >
               Delete

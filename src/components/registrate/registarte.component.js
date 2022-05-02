@@ -162,12 +162,12 @@ const Registrate = () => {
     return <Redirect to="/login"></Redirect>;
   }
   return (
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
-          <div class="card border-0 shadow rounded-3 my-5">
-            <div class="card-body p-4 p-sm-5">
-              <h5 class="card-title text-center mb-5 fw-light fs-5">
+    <div className="container">
+      <div className="row">
+        <div className="col-sm-10 col-md-8 col-lg-6 mx-auto">
+          <div className="card border-0 shadow rounded-3 my-5">
+            <div className="card-body p-4 p-sm-5">
+              <h5 className="card-title text-center mb-5 fw-light fs-5">
                 Register
               </h5>
               <form onSubmit={submit} className="text-center m-5">
@@ -179,14 +179,14 @@ const Registrate = () => {
                     onChange={onChange}
                   />
                 ))}
-                <div class="d-grid mt-5 mb-2">
+                <div className="d-grid mt-5 mb-2">
                   <button className="btn btn-primary p-2" type="submit">
                     Register
                   </button>
                 </div>
-                <p class="text-center text-muted mt-3 mb-0">
+                <p className="text-center text-muted mt-3 mb-0">
                   Have already an account?{" "}
-                  <a href="/login" class="fw-bold text-body">
+                  <a href="/login" className="fw-bold text-body">
                     <u>Login here</u>
                   </a>
                 </p>

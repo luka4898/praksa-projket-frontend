@@ -128,12 +128,12 @@ const Login = (props) => {
   const inStyle = { width: 50, height: 50 };
   return (
     <>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card border-0 shadow rounded-3 my-5">
-              <div class="card-body p-4 p-sm-5">
-                <h5 class="card-title text-center mb-5 fw-light fs-5">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card border-0 shadow rounded-3 my-5">
+              <div className="card-body p-4 p-sm-5">
+                <h5 className="card-title text-center mb-5 fw-light fs-5">
                   Sign In
                 </h5>
                 <form onSubmit={submit} className="text-center m-4 ">
@@ -146,27 +146,27 @@ const Login = (props) => {
                     />
                   ))}
 
-                  <div class="d-grid mt-4 mb-4">
+                  <div className="d-grid mt-4 mb-4">
                     <button className="btn btn-primary" type="submit">
                       Submit
                     </button>
                   </div>
-                  <div class="d-grid">
-                    <small class="form-text text-muted text-right  ">
+                  <div className="d-grid">
+                    <small className="form-text text-muted text-right  ">
                       <Link to={"/forgot"}>Forgot password?</Link>
                     </small>
                   </div>
                 </form>
-                <div class="row m-2">
-                  <div class="col">
+                <div className="row m-2">
+                  <div className="col">
                     <hr />
                   </div>
-                  <div class="col-auto">OR</div>
-                  <div class="col">
+                  <div className="col-auto">OR</div>
+                  <div className="col">
                     <hr />
                   </div>
                 </div>
-                <div class="row m-3">
+                <div className="row m-3">
                   <GoogleLogin
                     render={(renderProps) => (
                       <button
@@ -174,7 +174,7 @@ const Login = (props) => {
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                       >
-                        <i class="bi bi-google " /> Sign in with Google
+                        <i className="bi bi-google " /> Sign in with Google
                       </button>
                     )}
                     clientId="115115841938-siocnn1d7h9cuvs209t0j1s3avnrmepm.apps.googleusercontent.com"
@@ -184,7 +184,7 @@ const Login = (props) => {
                     cookiePolicy={"single_host_origin"}
                   />
                 </div>
-                <div class="row m-1">
+                <div className="row m-1">
                   <FacebookLogin
                     icon="fa-facebook p-1"
                     cssClass="btn-facebook w-100 p-2"

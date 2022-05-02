@@ -38,6 +38,18 @@ class Sidebar extends Component {
               </li>
               <li
                 className={
+                  this.state.activeMenu === "allevents" ? "active" : " "
+                }
+                onClick={() => {
+                  this.setState({ activeMenu: "allevents" });
+                }}
+              >
+                <a href="/allevents">
+                  <span className="bi bi-gear"></span> Manage events
+                </a>
+              </li>
+              <li
+                className={
                   this.state.activeMenu === "post-admin" ? "active" : " "
                 }
                 onClick={() => {
@@ -108,18 +120,7 @@ class Sidebar extends Component {
                   <span className="bi bi-building"></span> Cities
                 </a>
               </li>
-              <li
-                className={
-                  this.state.activeMenu === "allevents" ? "active" : " "
-                }
-                onClick={() => {
-                  this.setState({ activeMenu: "allevents" });
-                }}
-              >
-                <a href="/allevents">
-                  <span className="bi bi-list"></span> All events
-                </a>
-              </li>
+
               <li
                 className={this.state.activeMenu === "users" ? "active" : " "}
                 onClick={() => {

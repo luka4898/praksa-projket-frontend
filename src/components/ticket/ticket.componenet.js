@@ -138,6 +138,7 @@ class Ticket extends Component {
                       className="card-body card-title img-card-event"
                       src={variables.PHOTO_URL + tic.qrPath}
                     />
+                    {console.log(variables.PHOTO_URL + tic.qrPath)}
                   </section>
                   <section className="card-cont">
                     <h3>Event manager</h3>

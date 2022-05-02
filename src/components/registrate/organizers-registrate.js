@@ -169,9 +169,9 @@ const OrganizersRegistrate = () => {
       </nav>
       <hr className="mt-0 mb-4" />
 
-      <div class="row">
-        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
-          <h5 class=" text-center mb-5 mt-2 fw-light fs-5">Register</h5>
+      <div className="row">
+        <div className="col-sm-10 col-md-8 col-lg-6 mx-auto">
+          <h5 className=" text-center mb-5 mt-2 fw-light fs-5">Register</h5>
           <form onSubmit={submit} className="text-center m-4">
             {inputs.map((input) => (
               <FormInput

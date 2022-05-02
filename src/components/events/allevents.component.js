@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-import {
-  Button,
-  ButtonToolbar,
-  Table,
-  ButtonGroup,
-  Card,
-} from "react-bootstrap";
+import { Table, Card, Form, Button } from "react-bootstrap";
 import dateFormat from "dateformat";
-import ViewEvent from "./viewevent.component";
-import AddEvent from "./addevent.component";
 import moment from "moment";
 import Swal from "sweetalert2";
 
@@ -22,6 +14,7 @@ class AllEvents extends Component {
       error: null,
       eventNameFilter: "",
       eventsWithoutFilter: [],
+      type: "All events",
     };
   }
   FilterFn() {
@@ -39,7 +32,12 @@ class AllEvents extends Component {
   }
   refreshList() {
     setTimeout(() => {
-      fetch("https://localhost:7100/api/CurrentEvents/getallevents", {
+      let url;
+      if (this.state.type == "All events")
+        url = "https://localhost:7100/api/CurrentEvents/getallevents";
+      else url = "https://localhost:7100/api/CurrentEvents/getallcurrentevents";
+
+      fetch(`${url}`, {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       })
@@ -63,7 +61,47 @@ class AllEvents extends Component {
         });
     }, 1000);
   }
-
+  deleteFinished = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((response) => {
+      if (response.isConfirmed) {
+        fetch("https://localhost:7100/api/CurrentEvents/deletefinishedevents", {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }).then((response) => {
+          let success = response.ok;
+          response
+            .json()
+            .then((response) => {
+              if (!success) {
+                throw Error(response.message);
+              }
+              Swal.fire("Deleted!", response.message, "success");
+              this.refreshList();
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error,
+                button: "OK!",
+              });
+            });
+        });
+      }
+    });
+  };
   changeEventNameFilter = (e) => {
     this.state.eventNameFilter = e.target.value;
     this.FilterFn();
@@ -79,7 +117,7 @@ class AllEvents extends Component {
     return (
       <div className="container px-4 mt-4">
         <nav className="nav nav-borders">
-          <h5 className="custom-header">All Events</h5>
+          <h5 className="custom-header">Manage events</h5>
         </nav>
         <hr className="mt-0 mb-4" />
         <div className="row">
@@ -96,6 +134,27 @@ class AllEvents extends Component {
                         onChange={this.changeEventNameFilter}
                         placeholder="Filter by name"
                       />
+
+                      <Form.Group controlId="events" className=" m-2">
+                        <Form.Control
+                          style={{ width: "auto" }}
+                          as="select"
+                          defaultValue={this.state.type}
+                          onChange={(e) =>
+                            this.setState(
+                              {
+                                type: e.target.value,
+                                isPending: true,
+                                events: null,
+                              },
+                              this.refreshList
+                            )
+                          }
+                        >
+                          <option value="All events">All events</option>
+                          <option value="Current events">Current events</option>
+                        </Form.Control>
+                      </Form.Group>
                     </div>
                     <div>
                       <Table
@@ -109,7 +168,9 @@ class AllEvents extends Component {
                           <tr className="text-center">
                             <th>Name</th>
                             <th>Organizer</th>
-                            <th>Current profit</th>
+                            {this.state.type === "All events" && (
+                              <th>Current profit</th>
+                            )}
                             <th>Date</th>
                             <th>Status</th>
                           </tr>
@@ -122,7 +183,9 @@ class AllEvents extends Component {
                             >
                               <td>{evn.eventName}</td>
                               <td>{evn.organizersName}</td>
-                              <td>{evn.profit} KM</td>
+                              {this.state.type === "All events" && (
+                                <td>{evn.profit} KM</td>
+                              )}
                               <td>
                                 {dateFormat(evn.begin, "dd. mm. yyyy.") +
                                   " - " +
@@ -147,6 +210,14 @@ class AllEvents extends Component {
                         </tbody>
                       </Table>
                     </div>
+                    {this.state.type == "Current events" && (
+                      <Button
+                        variant="danger mt-4 "
+                        onClick={this.deleteFinished}
+                      >
+                        Delete finished
+                      </Button>
+                    )}
                   </>
                 )}
               </Card.Body>

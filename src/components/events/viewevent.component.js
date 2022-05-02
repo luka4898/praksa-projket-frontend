@@ -45,7 +45,7 @@ class ViewEvent extends Component {
 
                     <p className="mb-0">
                       <b>Price: </b>
-                      {this.props.price + " KM"}
+                      {this.props.price + " BAM"}
                     </p>
                   </div>
                 </div>

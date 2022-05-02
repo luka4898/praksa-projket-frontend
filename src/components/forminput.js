@@ -11,9 +11,9 @@ const FormInput = (props) => {
   };
 
   return (
-    <div class="form-floating mb-3">
+    <div className="form-floating mb-3">
       <input
-        class="form-control"
+        className="form-control"
         {...inputProps}
         onChange={onChange}
         onBlur={handleFocus}
@@ -21,7 +21,7 @@ const FormInput = (props) => {
         focused={focused.toString()}
         style={{ height: 55 }}
       />
-      <label for="floatingInput">{label}</label>
+      <label htmlFor="floatingInput">{label}</label>
       <span className="custom-span">{errorMessage}</span>
     </div>
   );

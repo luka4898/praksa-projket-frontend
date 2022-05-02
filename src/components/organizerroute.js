@@ -8,7 +8,6 @@ const OrganizerRoute = ({ component: Component, ...rest }) => {
   if (authed) {
     organizerrole = JSON.stringify(currentUser.role).indexOf("Organizer") > -1;
   }
-  console.log(organizerrole);
   return (
     <Route
       {...rest}

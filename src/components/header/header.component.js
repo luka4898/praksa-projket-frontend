@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 import AccountView from "../account/account-view.component";
+import { variables } from "../../Variables";
 
 const Header = (props) => {
   const logout = async () => {
@@ -49,7 +50,7 @@ const Header = (props) => {
     menu = (
       <>
         <Nav.Link href="/login">Sign in</Nav.Link>
-        <Nav.Link href="/registrate">Registrate</Nav.Link>
+        <Nav.Link href="/registrate">Register</Nav.Link>
       </>
     );
   } else {
@@ -70,7 +71,15 @@ const Header = (props) => {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="/">Event Management</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <img
+            src={variables.PHOTO_URL + "\\Logo\\Eventlogo4.png"}
+            width="45"
+            alt="logo"
+            className="d-inline-block align-middle mr-3"
+          />
+          <span className="m-2">Event Management</span>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">

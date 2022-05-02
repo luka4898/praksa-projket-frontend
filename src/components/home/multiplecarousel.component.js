@@ -39,7 +39,7 @@ class MultipleCarousel extends Component {
                 <figcaption>
                   <span className="project-details">{evn.eventName}</span>
                   <span className="project-price">
-                    <strong>{evn.price} KM</strong>
+                    <strong>{evn.price} BAM</strong>
                   </span>
                   <span className="project-creator">{evn.organizersName}</span>
                 </figcaption>

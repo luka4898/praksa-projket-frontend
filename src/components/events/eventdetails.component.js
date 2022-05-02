@@ -89,7 +89,7 @@ class EventDetails extends Component {
                   </p>
                   <p>
                     <b>Price: </b>
-                    {event.price + " KM"}
+                    {event.price + " BAM"}
                   </p>
                   <p>
                     <b>Quantity: </b>
