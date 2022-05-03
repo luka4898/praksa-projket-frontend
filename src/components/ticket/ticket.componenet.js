@@ -141,7 +141,7 @@ class Ticket extends Component {
                     {console.log(variables.PHOTO_URL + tic.qrPath)}
                   </section>
                   <section className="card-cont">
-                    <h3>Event manager</h3>
+                  {tic.currentEvent ? <h3>{tic.currentEvent["eventName"]}</h3> : <h3> Event</h3>}
                     <div className="even-date">
                       <i className="fa fa-calendar"></i>
                       <time>
