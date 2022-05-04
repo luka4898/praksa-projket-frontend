@@ -7,6 +7,7 @@ class Sidebar extends Component {
       activeMenu: window.location.pathname.split("/")[1],
     };
   }
+
   render() {
     const loc = window.location.pathname;
     return (
@@ -120,7 +121,18 @@ class Sidebar extends Component {
                   <span className="bi bi-building"></span> Cities
                 </a>
               </li>
-
+              <li
+                className={
+                  this.state.activeMenu === "eventType" ? "active" : " "
+                }
+                onClick={() => {
+                  this.setState({ activeMenu: "eventType" });
+                }}
+              >
+                <a href="/eventType">
+                  <span className="bi bi-grid"></span> Event types
+                </a>
+              </li>
               <li
                 className={this.state.activeMenu === "users" ? "active" : " "}
                 onClick={() => {

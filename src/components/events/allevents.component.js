@@ -184,7 +184,7 @@ class AllEvents extends Component {
                               <td>{evn.eventName}</td>
                               <td>{evn.organizersName}</td>
                               {this.state.type === "All events" && (
-                                <td>{evn.profit} KM</td>
+                                <td>{evn.profit} BAM</td>
                               )}
                               <td>
                                 {dateFormat(evn.begin, "dd. mm. yyyy.") +

@@ -560,7 +560,7 @@ figcaption .project-details {
   display: block;
   font-size: 16px;
   line-height: 33px;
-  color: #0093d0;
+  color: black;
   height: 27px;
   width: 85%;
   margin-bottom: 5px;
@@ -573,7 +573,7 @@ figcaption .project-price {
   top: 12px;
   font-size: 22px;
   text-align: right;
-  margin-top: 8px;
+  margin-top: 20px;
   letter-spacing: -1px;
   -webkit-font-smoothing: antialiased;
 }
@@ -1056,6 +1056,7 @@ figcaption .project-creator {
 
 .view-account .content-panel {
   padding: 30px;
+  padding-bottom: 100px;
 }
 
 .view-account .content-panel .title {
@@ -1474,7 +1475,7 @@ figcaption .project-creator {
 @media (min-width: 768px) {
   .view-account .side-bar .user-info {
     padding: 0;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
   }
   .view-account .mail-subject .subject {
     max-width: 200px;

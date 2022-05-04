@@ -40,7 +40,7 @@ export class EditEventType extends Component {
   componentWillReceiveProps(props) {
     this.setState({
       form: {
-        eventTypeName: props.eventTypeName,
+        eventTypeName: props.eventtypename,
       },
     });
   }
@@ -127,12 +127,11 @@ export class EditEventType extends Component {
                     <Form.Control
                       type="text"
                       name="eventTypeName"
-                      required
                       onChange={(e) =>
                         this.setField("eventTypeName", e.target.value)
                       }
                       isInvalid={!!errors.eventTypeName}
-                      defaultValue={this.props.eventTypeName}
+                      defaultValue={this.props.eventtypename}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.eventTypeName}

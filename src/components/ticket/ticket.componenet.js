@@ -89,7 +89,7 @@ class Ticket extends Component {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, make refund!",
     }).then((response) => {
       if (response.isConfirmed) {
         fetch(`https://localhost:7100/api/CurrentEvents/refund?id=${id}`, {
@@ -141,7 +141,11 @@ class Ticket extends Component {
                     {console.log(variables.PHOTO_URL + tic.qrPath)}
                   </section>
                   <section className="card-cont">
-                  {tic.currentEvent ? <h3>{tic.currentEvent["eventName"]}</h3> : <h3> Event</h3>}
+                    {tic.currentEvent ? (
+                      <h3>{tic.currentEvent["eventName"]}</h3>
+                    ) : (
+                      <h3> Event</h3>
+                    )}
                     <div className="even-date">
                       <i className="fa fa-calendar"></i>
                       <time>
